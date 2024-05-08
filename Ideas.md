@@ -17,3 +17,11 @@ Anotación de ideas y búsquedas previas para el proyecto final
    - Hay bases de datos de imagenes
    - A partir de parámetros como edad, forma de la masa etc, el modelo determina si es o no cáncer
 6. Naive Bayes para determinar si una noticia es falsa o no
+
+| Proyecto   | Base de datos | Enfoque|
+|------------|---------------|--------------|
+| Identificación de estructuras estelares | VizieR | Clustering |
+| Clasificación morfológica de galaxias | Galaxy Zoo| RNA    |
+| Traductor de lenguaje de signos | Dactilología del Lenguaje de Signos Español (LSE)   | RNA|
+| Identificador de bulos| Kaggle | Naive-Bayes|
+| Predicción de cosechas en base a clima | data.world y Meteosat/TuTiempo/NASA | Serie temporal |
