@@ -5,7 +5,7 @@ Anotación de ideas y búsquedas previas para el proyecto final
    - Los datos se encuentran fácil en bases de datos de satelites
    - Con características de las estrellas (edad, composición, velocidad, etc) se pueden agrupar en clusters
    - Esto, junto a la posición, permite identificar estructuras de estrellas
-2. Identificación de tipos de galaxias con RNA:
+2. Identificación de tipos de galaxias con ANN:
    - A partir de fotos de galaxias, identificar de qué tipo son (espirales, elípticas, etc)
    - Las imágenes son facilmente recopilables
 3. Clima y precios agrícolas con un modelo de regresión
