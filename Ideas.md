@@ -21,7 +21,7 @@ Anotación de ideas y búsquedas previas para el proyecto final
 | Proyecto   | Base de datos | Enfoque|
 |------------|---------------|--------------|
 | Identificación de estructuras estelares | VizieR | Clustering |
-| Clasificación morfológica de galaxias | Galaxy Zoo| ARN    |
-| Traductor de lenguaje de signos | Dactilología del Lenguaje de Signos Español (LSE)   | ARN|
+| Clasificación morfológica de galaxias | Galaxy Zoo| ANN    |
+| Traductor de lenguaje de signos | Dactilología del Lenguaje de Signos Español (LSE)   | ANN|
 | Identificador de bulos| Kaggle | Naive-Bayes|
 | Predicción de cosechas en base a clima | data.world y Meteosat/TuTiempo/NASA | Serie temporal |
