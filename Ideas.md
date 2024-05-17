@@ -25,3 +25,7 @@ Anotación de ideas y búsquedas previas para el proyecto final
 | Traductor de lenguaje de signos | Dactilología del Lenguaje de Signos Español (LSE)   | ANN|
 | Identificador de bulos| Kaggle | Naive-Bayes|
 | Predicción de cosechas en base a clima | data.world y Meteosat/TuTiempo/NASA | Serie temporal |
+
+
+
+  * https://docs.astropy.org/en/stable/io/fits/
