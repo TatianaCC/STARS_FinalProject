@@ -4,7 +4,7 @@ Este proyecto tiene como objetivo, a partir de la introducción de una lista de 
 1. Problema de clustering: construir un modelo de clustering que agrupe apropiadamente las estrellas en base a las características más relevantes.
 2. Problema de RNA: construir un modelo que sea capaz de diferenciar cúmulos abiertos o globulares. (Ver Figura 1)
 
-![Figura 1: tipos de cúmulos.]('./TiposCumulo.jpg')
+![Figura 1: tipos de cúmulos.](./TiposCumulo.jpg)
 
 ## 1. Obtención de datos
 Los datos podrán buscarse en la base de datos VizieR (https://vizier.cds.unistra.fr/viz-bin/VizieR). Este es un portal donde se alojan de forma gratuita los datasets que los científicos usan para sus investigaciones. Los datos generalmente provienen de satélites y observatorios que hacen observaciones del cielo bucando objetos concretos. Algunas misiones se centran en galaxias, otras en supernovas, etc. En nuestro caso estamos buscando datos de estrellas concretas.
