@@ -71,10 +71,3 @@ def decompress_volumes(prefix: str, output_dir: str, folder: str):
     os.unlink(combined_file)
 
     print(f'Archivos descomprimidos en {output_dir}')
-
-# Ejemplo de uso:
-decompress_volumes('STARSSample', '../Samples/Decompress', '../Samples/Compressed')
-
-
-# Ejemplo de uso:
-decompress_volumes('STARSSample', '../Samples/Decompress', '../Samples/Compressed')
