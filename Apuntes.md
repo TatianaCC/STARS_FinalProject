@@ -14,10 +14,17 @@ El mejor catálogo de estrellas actualmente es el obtenido por la misión Gaia, 
 Para escoger estrellas que pertenezcan a cúmulos, ya sean abiertos o cerrados, nos fijaremos en trabajos previos de investigadores que hayan hecho una selección aproximada de estrellas para uno o varios cumulos en concreto. 
 1. Tomaremos de sus samples de datos las coordenadas de las estrellas y el cúmulo al que pertenecen.
 2. Unificaremos todas las estrellas en un únido dataset.
-3. Unificaremos los nombres de los cúmulos, ya que puede estas el mismo cumulo repetidamente, con nombres diferentes. Para ello:
+> Esto está en Clusters.csv
+3. Unificaremos los nombres de los cúmulos, ya que puede estar el mismo cumulo repetidamente, con nombres diferentes. Para ello:
    1. Haremos una tabla de equivalencia de nombres en los diferentes catálogos.
+   > Esta tabla es NamesCatalogEquivalence.csv
    2. Unificaremos los nombres de nuestras estrellas bajo el mismo catálogo.
+   > Esto está recogido en RenamedClusters.csv
 4. Cruzaremos nuestras estrellas con la base da datos de Gaia DR3 usando el software TopCat, específico para hacer Astronomical Data Query Language (ADQL)
+> Esto está en STARSSample.csv
+
+5. Tambien se contruye una tabla de características generales de cada cúmulo (ClustersInfo) que servirá para el tratamiento de valores nulos y outliers. Se le aplica el mismo tratamiento a los nombres de los clusters.
+> Esto está en ClustersInfo_clean.csv
 
 > Este trabajo está hecho en BuildData.ipynb
 
@@ -56,6 +63,15 @@ Dado que los cúmulos son grupos de estrellas que se formaron más o menos a la 
 Es posible que en nuestra selección de estrellas tengamos estrellas que aparentemente pertenecen el grupo del cúmulo, pero que en realidad no es hermana del resto. Estas estrellas infiltradas aparecerán como outliers en las variables antes descritas y el tratamiento correcto es la eliminación del dataset.
 
 > Para este trabajo (repetitivo con cada grupo), podemos hacerlo una vez para un cúmulo, poniendo todo bonito y las gráficas chulas y eso luego usar eso para hacer una librería que usar con el resto de cúmulos para ahorrar trabajo.
+
+## Datasets
+
+1. Clusters: contiene una lista de estrellas con sus coordenadas y el cúmulo al que pertenecen. Se ha construido en el paso 1, puntos 1 y 2.
+2. NamesCatalogEquivalence: tabla con el nombre de cda cumulo en diferentes catálogos. Se ha construido en elpaso 1, punto 3. Se usa para renombrar los clusters y tenerlos todos siempre nombrados igual.
+3. RenamedClusters: es el dataset Clusters habiendo cambiado los nombres de los clusters mediante la tabla NamesCatalogEquivalence. Se ha construido en elpaso 1, punto 3.
+4. STARTSSample: es nuestro dataset inicial. Es el resultado de añadir todas las características de las estrellas a RenamedClusters mediante la herramiento TopCat. Se ha construido en elpaso 1, punto 4.
+5. ClustersInfo: es una tabla de características generales de cada cúmulo. Es como tener 'la media' de las caracteristicas de todas las estrellas que componen cada cumulo. Se construye fuera del repo.
+6. ClustersInfo_clean: es el resultado de renombrar los clusters y arreglar el formato de ClustersInfo. Se construye en el paso 1, punto 5. Se usará en el tratamiendo de valores nulos y outliers.
 
 
 ## Apéndice 1: Menciones
