@@ -2,6 +2,9 @@
 Samples/ZT-GDR3_Astro_example
 Samples/STARSSample.csv
 Samples/Decompress
+Samples/Clean/STARSSample_EDA1.csv
+Samples/Clean/STARSSample_EDA1_fz.csv
+Samples/Clean/Subsets
 
 #CUSTOM IGNORES
 

@@ -32,18 +32,19 @@ Para escoger estrellas que pertenezcan a cúmulos, ya sean abiertos o cerrados, 
 
 Comenzaremos el EDA haciendo una exploración general del dataset para luego pasar a hacer el tratamiento de outliers cúmulo a cúmulo. Nuestra target es la columna 'Clusters', siendo el resto de columnas las predictoras.
 
-### 2.2 Exploración general
+### 2.1 Exploración general
 En BuildData se encuentra la descripción de las columnas de nuestro dataset. A partir de aqui:
 
 1. Se eliminan la columnas repetidas
 2. Se elimnan las predictoras que estamos seguros que son innecesarias para nuestro objetivo
-3. Se realiza el tratamiento de valores nulos
-4. Se hace una limpieza general de datos en base a algunas columnas
-5. Se factorizan las columnas categóricas y se guardan las tablas de equivalencia
+3. Se hace una limpieza general de datos en base a algunas columnas
+4. Se realiza el tratamiento de valores nulos
+5. Se eliminan totalmente los cúmulos que hayan quedado con un número de estrellas muy bajo, insuficiente para un tratamiento posterior.
+6. Se factorizan las columnas categóricas y se guardan las tablas de equivalencia
 
 > Este trabajo se realizará en BuildData
-> El sample resultado de estos cambios se guarda como '../Samples/PostEDA/STARS_PreCleaned.csv'
-> Las tablas de equivalencia de las categóricas se guarda como '../Samples/Auxiliar/NombreVariable_Factorization.csv'
+> El sample resultado de estos cambios se guarda como '../Samples/Clean/STARSSample_EDA1.csv' y factorizado como '../Samples/Clean/STARSSample_EDA1_fz.csv'
+> Las tablas de equivalencia de las categóricas se guarda como '../Samples/Auxiliar/Cluster_mappings.csv'
 
 ### 2.3 Tratamiento de outliers
 Dado que en nuestro dataset tenemos datos de diferentes cúmulos que se encuentran en diferentes lugares de nuestra galaxia, no tiene sentido hacer la búsqueda de outliers teniendo en cuenta todo el dataset en su conjunto. Por ello:
