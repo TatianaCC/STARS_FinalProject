@@ -5,6 +5,12 @@ Samples/Decompress
 Samples/Clean/STARSSample_EDA1.csv
 Samples/Clean/STARSSample_EDA1_fz.csv
 Samples/Clean/Subsets
+Samples/Auxiliar
+data/processed/factorized_mapping/Cluster_mappings.csv
+Samples/Clean/NamesCatalogEquivalence.csv
+Samples/Clean/STARTSSample_EDA1_fz.csv
+Samples/Clean/STARTSSample_EDA1.csv
+
 
 #CUSTOM IGNORES
 
@@ -116,6 +122,3 @@ dmypy.json
 # Streamlit static files
 .streamlit/
 
-# Data and models
-/models/similarity.pkl
-/models/vectorizer.pkl
