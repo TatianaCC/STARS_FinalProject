@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from tabulate import tabulate
 
 # Function to remove spaces of a string
 def remove_spaces(x):
@@ -156,3 +157,63 @@ def pm_analysis(k, cluster):
     plt.show()
 
     return valid
+
+
+def explore(data_frame: pd.DataFrame):
+    """
+    Explores a pandas DataFrame and prints information about its characteristics.
+
+    This function `prints` useful `information` about the provided pandas DataFrame,
+    including the number of `rows` and `columns`, the count of `null` and `non-null` values,
+    the `data type` of each column, and whether each column is `categorical` or `numerical`.
+
+    Parameters::
+
+        data_frame (pandas.DataFrame): The pandas DataFrame to be explored.
+
+    Returns:
+
+        tuple: A tuple containing two lists. The first list contains the names of categorical columns.
+        The second list contains the names of Numerical columns.
+    """
+    data_frame_ = data_frame.copy()
+    
+    # Get shape
+    num_rows_, num_columns_ = data_frame_.shape
+    print('Rows:', num_rows_)
+    print('Columns:', num_columns_)
+
+    # Get null and type info
+    column_data_ = pd.DataFrame({
+        'Non-Null Count': data_frame_.count(),
+        'Null Count': data_frame_.isnull().sum(),
+        'Nan Count': data_frame_.isna().sum(),
+        'Data Type': data_frame_.dtypes
+    }) 
+    # Add if a variable is categorical or numerical  
+    column_data_['Data Category'] = data_frame_.apply(get_column_type)
+    print(tabulate(column_data_, headers='keys', tablefmt='pretty'))
+     
+
+def get_column_type(series: str):
+    """
+    Determines the column type of a pandas series.
+
+    This function takes a pandas series as input and determines whether the data
+    in the series are `Numerical` or `categorical`.
+
+    Parameters::
+
+        series (pandas.Series): The pandas series from which the column type will be determined.
+
+    Returns::
+    
+        str: 'Numerical': If they are Numerical.
+             'Categorical': If they are categorical.
+    """
+    series_ = series.copy()
+    
+    if pd.api.types.is_numeric_dtype(series_):
+        return 'Numerical'
+    else:
+        return 'Categorical'
