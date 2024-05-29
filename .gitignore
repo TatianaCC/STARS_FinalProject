@@ -122,3 +122,8 @@ dmypy.json
 # Streamlit static files
 .streamlit/
 
+Samples/Clean/STARSSample_norm.csv
+Samples/Clean/Feature_Selection/X_test.csv
+Samples/Clean/Feature_Selection/X_train.csv
+Samples/Clean/Feature_Selection/Y_test.csv
+Samples/Clean/Feature_Selection/Y_train.csv
