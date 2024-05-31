@@ -171,10 +171,6 @@ def explore(data_frame: pd.DataFrame):
 
         data_frame (pandas.DataFrame): The pandas DataFrame to be explored.
 
-    Returns:
-
-        tuple: A tuple containing two lists. The first list contains the names of categorical columns.
-        The second list contains the names of Numerical columns.
     """
     data_frame_ = data_frame.copy()
     
