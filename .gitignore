@@ -128,3 +128,5 @@ Samples/Clean/Feature_Selection/X_test.csv
 Samples/Clean/Feature_Selection/X_train.csv
 Samples/Clean/Feature_Selection/Y_test.csv
 Samples/Clean/Feature_Selection/Y_train.csv
+images/output.png
+images/Kmean_3d.png
