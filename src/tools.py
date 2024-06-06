@@ -213,3 +213,24 @@ def get_column_type(series: str):
         return 'Numerical'
     else:
         return 'Categorical'
+    
+def graphic_tester(df_real, df_model, groupby_real, groupby_model, x, y):
+    df_real['Index'] = df_real.index
+    cluster_means_real = df_real.groupby(groupby_real).agg({
+        x: 'mean',
+        y: 'mean',
+        'Index': 'count',
+    }).reset_index()
+
+    df_model['Index'] = df_model.index
+    cluster_means_model = df_model.groupby(groupby_model).agg({
+        x: 'mean',
+        y: 'mean',
+        'Index': 'count',
+    }).reset_index()
+
+    # Graph
+    plt.figure(figsize=(20, 8))
+    sns.scatterplot(cluster_means_real, x=x, y=y, size='Index', alpha=0.4, sizes=(10,5000), legend=False,color='#4c72b0')
+    sns.scatterplot(cluster_means_model, x=x, y=y, size='Index', alpha=0.5, sizes=(10,5000), legend=False, color='#dd8452')
+    plt.show()
