@@ -3,6 +3,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from tabulate import tabulate
+from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
+from sklearn import metrics
 
 # Function to remove spaces of a string
 def remove_spaces(x):
@@ -234,3 +236,76 @@ def graphic_tester(df_real, df_model, groupby_real, groupby_model, x, y):
     sns.scatterplot(cluster_means_real, x=x, y=y, size='Index', alpha=0.4, sizes=(10,5000), legend=False,color='#4c72b0')
     sns.scatterplot(cluster_means_model, x=x, y=y, size='Index', alpha=0.5, sizes=(10,5000), legend=False, color='#dd8452')
     plt.show()
+
+def clustering_metrics(X, labels_true, labels_pred):
+    # Internal metrics
+    #silhouette = silhouette_score(X, labels_pred)
+    #davies_bouldin = davies_bouldin_score(X, labels_pred)
+    #calinski_harabasz = calinski_harabasz_score(X, labels_pred)
+
+    # External metrics
+    homogeneity = metrics.homogeneity_score(labels_true, labels_pred)
+    completeness = metrics.completeness_score(labels_true, labels_pred)
+    v_measure = metrics.v_measure_score(labels_true, labels_pred)
+    ari = metrics.adjusted_rand_score(labels_true, labels_pred)
+    ami = metrics.adjusted_mutual_info_score(labels_true, labels_pred)
+
+    # Evaluation criteria
+    def rate_metric(value, metric_name):
+        if metric_name in ['Silhouette Score', 'Homogeneity', 'Completeness', 'V-Measure', 'ARI', 'AMI']:
+            if value >= 0.8:
+                return '★★★★★'
+            elif value >= 0.6:
+                return '★★★★'
+            elif value >= 0.4:
+                return '★★★'
+            elif value >= 0.2:
+                return '★★'
+            else:
+                return '★'
+        elif metric_name == 'Davies-Bouldin Index':
+            if value <= 0.5:
+                return '★★★★★'
+            elif value <= 1.0:
+                return '★★★★'
+            elif value <= 1.5:
+                return '★★★'
+            elif value <= 2.0:
+                return '★★'
+            else:
+                return '★'
+        elif metric_name == 'Calinski-Harabasz Index':
+            if value >= 1000:
+                return '★★★★★'
+            elif value >= 500:
+                return '★★★★'
+            elif value >= 100:
+                return '★★★'
+            elif value >= 10:
+                return '★★'
+            else:
+                return '★'
+
+    # Metrics dictionarie
+    metrics_dict = {
+        'Metric': [
+            'Silhouette Score', 'Davies-Bouldin Index', 'Calinski-Harabasz Index',
+            'Homogeneity', 'Completeness', 'V-Measure', 'ARI', 'AMI'
+        ],
+        'Value': [
+            silhouette, davies_bouldin, calinski_harabasz,
+            homogeneity, completeness, v_measure, ari, ami
+        ],
+        'Rating': [
+            rate_metric(silhouette, 'Silhouette Score'),
+            rate_metric(davies_bouldin, 'Davies-Bouldin Index'),
+            rate_metric(calinski_harabasz, 'Calinski-Harabasz Index'),
+            rate_metric(homogeneity, 'Homogeneity'),
+            rate_metric(completeness, 'Completeness'),
+            rate_metric(v_measure, 'V-Measure'),
+            rate_metric(ari, 'ARI'),
+            rate_metric(ami, 'AMI')
+        ]
+    }
+    df_metrics = pd.DataFrame(metrics_dict)
+    print(df_metrics)
