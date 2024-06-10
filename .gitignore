@@ -12,8 +12,8 @@ Samples/Clean/STARTSSample_EDA1.csv
 Samples/Clean/STARSSample_EDA2.csv
 Samples/Clean/Feature_Selection
 Samples/Clean/Testing
-Models\HDBSCAN.pkl
-Models\HDBSCAN-human.pkl
+Models/HDBSCAN.pkl
+Models/HDBSCAN-human.pkl
 
 #CUSTOM IGNORES
 
