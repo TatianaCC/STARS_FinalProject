@@ -38,7 +38,8 @@ X_data_with_y_predict = X_data.copy()
 X_data_with_y_predict['cluster_hdbscan'] = y_predict
 
 dump(clusterer, open("../../Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true.pkl", "wb"))
-
+X_data_with_y.to_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y.csv', index=False)
+X_data_with_y_predict.to_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_predict.csv', index=False)
 # endregion
 
 # region graph
