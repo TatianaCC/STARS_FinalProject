@@ -31,7 +31,7 @@ def replicates_rows(df,row):
 
 #Function to rename clusters columns using NamesCatalogEquivalence
 def rename_clusters(name):
-    clusters_names = pd.read_csv('../Samples/Auxiliar/NamesCatalogEquivalence.csv')
+    clusters_names = pd.read_csv('../../Samples/Auxiliar/NamesCatalogEquivalence.csv')
     if 'NGC' in name:
         return name
     else:
@@ -76,11 +76,11 @@ def split_clusters(df):
     grouped = df.groupby('Cluster_O')
     for cluster_name, group in grouped:
         filename = f"{cluster_name}.csv"
-        group.to_csv('../Samples/Clean/Subsets/'+filename, index=False)
+        group.to_csv('../../Samples/Clean/Subsets/'+filename, index=False)
 
 # Function to find outliers by pmRA and pmDE
 def pm_analysis(k, cluster):
-    df = pd.read_csv('../Samples/Clean/Subsets/'+cluster+'.csv')
+    df = pd.read_csv('../../Samples/Clean/Subsets/'+cluster+'.csv')
     # Outliers
     var =  ['pmRA','pmDE']
     limits = {}
