@@ -2,7 +2,9 @@
 import sys
 import os
 current_dir = os.getcwd()
-sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'Tools')))
+tools_path = os.path.abspath(os.path.join(current_dir, '..', 'Tools'))
+print(f"Adding '{tools_path}' to sys.path")
+sys.path.append(tools_path)
 import hdbscan
 import numpy as np
 import pandas as pd
@@ -46,7 +48,7 @@ if not os.path.exists(X_data_with_y_PATH) or not os.path.exists(X_data_with_y_pr
             y_predict = np.load(y_predict_path)
     else:
         print("El modelo no existe, estoy generandolo")
-        clusterer = hdbscan.HDBSCAN(min_cluster_size=5, core_dist_n_jobs=11, gen_min_span_tree=True)
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=5, core_dist_n_jobs=7, gen_min_span_tree=True)
         y_predict = clusterer.fit_predict(X_data_array)
         dump(clusterer, open("../../Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true2.pkl", "wb"))
     
