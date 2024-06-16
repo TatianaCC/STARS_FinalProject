@@ -21,10 +21,10 @@ from tools import graphic_tester
 
 # region Importacion datasets
 print("Cargando datasets...")
-X_train = pd.read_csv('../../Samples/Clean/Feature_Selection/X_train.csv')
-X_test = pd.read_csv('../../Samples/Clean/Feature_Selection/X_test.csv')
-y_train = pd.read_csv('../../Samples/Clean/Feature_Selection/Y_train.csv')
-y_test = pd.read_csv('../../Samples/Clean/Feature_Selection/Y_test.csv')
+X_train = pd.read_csv('../../Samples/Clean/Feature_Selection/X_train2.csv')
+X_test = pd.read_csv('../../Samples/Clean/Feature_Selection/X_test2.csv')
+y_train = pd.read_csv('../../Samples/Clean/Feature_Selection/Y_train2.csv')
+y_test = pd.read_csv('../../Samples/Clean/Feature_Selection/Y_test2.csv')
 
 # endregion
 
@@ -36,13 +36,13 @@ X_data_array = X_data.to_numpy()
 print("Datasets cargados!")
 
 # region import data
-X_data_with_y_PATH = '../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_M.csv'
-X_data_with_y_predict_PATH = '../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_predict_M.csv'
+X_data_with_y_PATH = '../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_I.csv'
+X_data_with_y_predict_PATH = '../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_predict_I.csv'
 
 if not os.path.exists(X_data_with_y_PATH) or not os.path.exists(X_data_with_y_predict_PATH):
     print("X_data_with_y_PATH o X_data_with_y_predict_PATH no existe, estoy generandolo")
-    model_path = "../../Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true_M.pkl"
-    y_predict_path = "../../Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true_M.npy"
+    model_path = "../../Models/HDBSCAN_I.pkl"
+    y_predict_path = "../../Models/HDBSCAN_I.npy"
     if os.path.exists(model_path):
         print("El modelo ya existe")
         with open(model_path, 'rb') as file:
@@ -50,9 +50,9 @@ if not os.path.exists(X_data_with_y_PATH) or not os.path.exists(X_data_with_y_pr
             y_predict = np.load(y_predict_path)
     else:
         print("El modelo no existe, estoy generandolo")
-        clusterer = hdbscan.HDBSCAN(min_samples=None,min_cluster_size=5,cluster_selection_epsilon=2, core_dist_n_jobs=11,metric='euclidean', gen_min_span_tree=True)
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=20, cluster_selection_epsilon=0.5, core_dist_n_jobs=7, gen_min_span_tree=True)
         y_predict = clusterer.fit_predict(X_data_array)
-        dump(clusterer, open("../../Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true_M.pkl", "wb"))
+        dump(clusterer, open("../../Models/HDBSCAN_I.pkl", "wb"))
     
     # Unir y_test y y_predict_test con X_test
     X_data_with_y = X_data.copy()
@@ -60,8 +60,8 @@ if not os.path.exists(X_data_with_y_PATH) or not os.path.exists(X_data_with_y_pr
     X_data_with_y_predict = X_data.copy()
     X_data_with_y_predict['cluster_hdbscan'] = y_predict
 
-    X_data_with_y.to_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_M.csv', index=False)
-    X_data_with_y_predict.to_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_predict_M.csv', index=False)
+    X_data_with_y.to_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_I.csv', index=False)
+    X_data_with_y_predict.to_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_predict_I.csv', index=False)
 else:
     print("X_data_with_y_PATH o X_data_with_y_predict_PATH existen")
 
