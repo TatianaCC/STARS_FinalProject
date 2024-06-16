@@ -25,7 +25,7 @@ def compress_and_split(input_file: str, output_prefix: str, output_folder: str, 
 
     # Especificar el número de hilos a utilizar (70% de los hilos disponibles)
     num_cpus = os.cpu_count()
-    num_threads = max(1, int(0.7 * num_cpus))
+    num_threads = 1 if num_cpus is None else max(1, int(0.7 * num_cpus))
 
     # Dividir el archivo 7z en volúmenes del tamaño especificado utilizando 7z
     subprocess.run(['7z', 'a', '-mmt'+str(num_threads), '-v'+str(volume_size), os.path.join(output_folder, f'{output_prefix}.7z'), '-v'+str(volume_size), input_file])

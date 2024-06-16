@@ -70,7 +70,6 @@ def nulls_in_cluster(df):
     df_merged_sorted = df_merged.sort_values(by='n_percentage', ascending=False)
 
     return df_merged_sorted 
-    print(df_merged_sorted.sort_values(by='nulos_t', ascending=False))
 
 def split_clusters(df):
     grouped = df.groupby('Cluster_O')
@@ -154,13 +153,13 @@ def pm_analysis(k, cluster):
     fig.suptitle('Movimientos propios de '+cluster, fontsize=16)#
     fig.patch.set_visible(False)
 
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.tight_layout(rect=(0, 0, 1, 0.95))
     plt.subplots_adjust(wspace=0.1) 
     plt.show()
 
     return valid
 
-
+    
 def explore(data_frame: pd.DataFrame):
     """
     Explores a pandas DataFrame and prints information about its characteristics.
@@ -185,12 +184,18 @@ def explore(data_frame: pd.DataFrame):
     column_data_ = pd.DataFrame({
         'Non-Null Count': data_frame_.count(),
         'Null Count': data_frame_.isnull().sum(),
-        'Nan Count': data_frame_.isna().sum(),
+        'NaN Count': data_frame_.isna().sum(),
         'Data Type': data_frame_.dtypes
-    }) 
+    })
     # Add if a variable is categorical or numerical  
     column_data_['Data Category'] = data_frame_.apply(get_column_type)
-    print(tabulate(column_data_, headers='keys', tablefmt='pretty'))
+    
+    # Convert DataFrame to list of lists for tabulate
+    column_data_list = column_data_.reset_index().to_numpy().tolist()
+    column_headers = ['Column Name'] + column_data_.columns.tolist()
+
+    print(tabulate(column_data_list, headers=column_headers, tablefmt='pretty'))
+
      
 
 def get_column_type(series: str):
@@ -209,7 +214,7 @@ def get_column_type(series: str):
         str: 'Numerical': If they are Numerical.
              'Categorical': If they are categorical.
     """
-    series_ = series.copy()
+    series_ = series
     
     if pd.api.types.is_numeric_dtype(series_):
         return 'Numerical'
@@ -289,17 +294,17 @@ def clustering_metrics(X, labels_true, labels_pred):
     # Metrics dictionarie
     metrics_dict = {
         'Metric': [
-            'Silhouette Score', 'Davies-Bouldin Index', 'Calinski-Harabasz Index',
+            #'Silhouette Score', 'Davies-Bouldin Index', 'Calinski-Harabasz Index',
             'Homogeneity', 'Completeness', 'V-Measure', 'ARI', 'AMI'
         ],
         'Value': [
-            silhouette, davies_bouldin, calinski_harabasz,
+            #silhouette, davies_bouldin, calinski_harabasz,
             homogeneity, completeness, v_measure, ari, ami
         ],
         'Rating': [
-            rate_metric(silhouette, 'Silhouette Score'),
-            rate_metric(davies_bouldin, 'Davies-Bouldin Index'),
-            rate_metric(calinski_harabasz, 'Calinski-Harabasz Index'),
+            #rate_metric(silhouette, 'Silhouette Score'),
+            #rate_metric(davies_bouldin, 'Davies-Bouldin Index'),
+            #rate_metric(calinski_harabasz, 'Calinski-Harabasz Index'),
             rate_metric(homogeneity, 'Homogeneity'),
             rate_metric(completeness, 'Completeness'),
             rate_metric(v_measure, 'V-Measure'),
