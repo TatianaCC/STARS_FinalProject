@@ -25,7 +25,7 @@ Models/HDBSCAN-human_I_minsamp-0_minclusize-5_epsilon-1_metric-eu_coredist-1_gen
 Models/HDBSCAN-human_F_minsamp-5_minclusize-10_epsilon-00_metric-eu_coredist-1_genminspantree-true.pkl
 Models/HDBSCAN-human_D_minsamp-5_minclusize-10_epsilon-05_metric-man_coredist-1_genminspantree-true.pkl
 Models/HDBSCAN2_J_minsamp-0_minclusize-5_epsilon-05_metric-eu_coredist-1_genminspantree-true.pkl
-
+data/Streamlit_data/CSV
 #CUSTOM IGNORES
 
 # Python

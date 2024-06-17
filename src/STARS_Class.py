@@ -29,6 +29,7 @@ We chose Bayesian optimization for four reasons:
 """
 
 #·······························IMPORTS·······························#
+from scipy.optimize._optimize import OptimizeResult
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import silhouette_score
@@ -41,21 +42,85 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 import pandas as pd
+
+space_hdbscan = [
+            Integer(5, 20, name='min_cluster_size'),
+            Integer(0, 20, name='min_samples'),
+            Real(0.0, 0.5, name='cluster_selection_epsilon')
+]
+
 class STARS:
     def __init__(self):
         self.data_csv: str = ""
         self.x_all = pd.DataFrame()
+        self.x_data_array = np.array([])
+        self.space_hdbscan = [
+            Integer(5, 20, name='min_cluster_size'),
+            Integer(0, 20, name='min_samples'),
+            Real(0.0, 0.5, name='cluster_selection_epsilon')
+        ]
 
     def main(self):
         return None
     
-    def doyourthing(self, filepath: str, db_id:int | None) -> None:
-    #·····························LOAD DATA······························#
-        self.data_csv = filepath
-        self.x_all = pd.read_csv(self.data_csv)   
-        self.x_data_array = self.x_all.to_numpy()
-        print(db_id,str(filepath)+str(db_id))
+    @use_named_args(dimensions=space_hdbscan)
+    def objective_hdbscan(self,params, *args):
+        clusterer = hdbscan.HDBSCAN(**params)
+        labels = clusterer.fit_predict(self.x_data_array)
         
+        # Not taking into account noise before calculating the score
+        valid_labels = labels[labels != -1]
+        if len(valid_labels) > 1:
+            score = silhouette_score(self.x_data_array[labels != -1], valid_labels,random_state=42)
+        else:
+            score = -1  # If there are only one cluster or noise
+        
+        # Return negative of combined score (to minimize)
+        return -(score + np.mean(labels != -1))
+       
+    def tatis_while(self):
+    
+        max_iter = 10
+        iter_count = 0
+        coherence = 0
+        while coherence < 0.95 and iter_count < max_iter:
+            # HDBSCAN optimization
+            res_hdbscan: OptimizeResult | None = gp_minimize(func=self.objective_hdbscan, dimensions=self.space_hdbscan, n_calls=50, random_state=42)
+            if res_hdbscan is not None:
+                best_params_hdbscan = dict(zip([dim.name for dim in self.space_hdbscan], res_hdbscan.x))
+            
+                # Instantiate HDBSCAN with best parameters
+                clusterer = hdbscan.HDBSCAN(**best_params_hdbscan)
+                clusters_hdbscan = clusterer.fit_predict(self.x_data_array)
+                
+                # Store clusters back into X_all and identify noise
+                x_cluster = self.x_all.copy(deep=True)
+                x_cluster['cluster_hdbscan'] = clusters_hdbscan
+                data_noise = self.x_all[self.x_all['cluster_hdbscan'] == -1]
+
+                # Calculate number of clusters and minimal cluster size
+                unique_clusters, counts_clusters = np.unique(clusters_hdbscan, return_counts=True)
+                num_clusters = len(unique_clusters) - 1  # Exclude noise cluster
+                min_cluster_size = min(counts_clusters[counts_clusters > 1])  # Exclude noise
+
+                # Split data for Random Forest training
+                x_train, x_test, y_train, y_test = train_test_split(self.x_data_array, clusters_hdbscan, test_size=0.3, random_state=42)
+                
+                # Train Random Forest with number of clusters as estimators
+                rf = RandomForestClassifier(n_estimators=num_clusters, min_samples_split=min_cluster_size, random_state=42)
+                rf.fit(x_train, y_train)
+                
+                # Predict clusters for all data
+                y_pred_full = rf.predict(self.x_data_array)
+                x_cluster['cluster_randomforest'] = y_pred_full
+
+                # Calculate coherence
+                coherence = np.mean(y_pred_full == clusters_hdbscan)
+                print(f"Iteration {iter_count + 1} - Coherence: {coherence * 100:.2f}%")
+                
+                iter_count += 1
+
+            print(f"Final coherence: {coherence * 100:.2f}%")
 
     #································TOOLS·······························#
     def graphic(self, df, groupby, x_axe, y_axe, save_path=None):
@@ -92,78 +157,22 @@ class STARS:
 
         with open('README.txt', 'w') as f:
             f.write(readme_content)
-
+    
     def todolodemas(self):
 
         print("Loaded dataset")
 
         #···················BAYESIAN HDBSCAN OPTIMIZATION····················#
         # Define search space
-        space_hdbscan = [
-            Integer(5, 25, name='min_cluster_size'),
-            Integer(1, 10, name='min_samples'),
-            Real(0.0, 0.3, name='cluster_selection_epsilon')
-        ]
 
-        @use_named_args(space_hdbscan)
-        def objective_hdbscan(**params):
-            clusterer = hdbscan.HDBSCAN(**params)
-            labels = clusterer.fit_predict(X_data_array)
-            
-            # Not taking into account noise before calculating the score
-            valid_labels = labels[labels != -1]
-            if len(valid_labels) > 1:
-                score = silhouette_score(X_data_array[labels != -1], valid_labels,random_state=42)
-            else:
-                score = -1  # If there are only one cluster or noise
-            
-            # Return negative of combined score (to minimize)
-            return -(score + np.mean(labels != -1))
+        
 
-        max_iter = 10
-        iter_count = 0
-        coherence = 0
+      
 
         X_cluster = pd.DataFrame()
         data_noise = pd.DataFrame()
         #·····························MAIN······························#
-        while coherence < 0.95 and iter_count < max_iter:
-            # HDBSCAN optimization
-            res_hdbscan = gp_minimize(objective_hdbscan, space_hdbscan, n_calls=50, random_state=42)
-            best_params_hdbscan = dict(zip([dim.name for dim in space_hdbscan], res_hdbscan.x))
-            
-            # Instantiate HDBSCAN with best parameters
-            clusterer = hdbscan.HDBSCAN(**best_params_hdbscan)
-            clusters_hdbscan = clusterer.fit_predict(X_data_array)
-            
-            # Store clusters back into X_all and identify noise
-            X_cluster = X_all.copy(deep=True)
-            X_cluster['cluster_hdbscan'] = clusters_hdbscan
-            data_noise = X_all[X_all['cluster_hdbscan'] == -1]
-
-            # Calculate number of clusters and minimal cluster size
-            unique_clusters, counts_clusters = np.unique(clusters_hdbscan, return_counts=True)
-            num_clusters = len(unique_clusters) - 1  # Exclude noise cluster
-            min_cluster_size = min(counts_clusters[counts_clusters > 1])  # Exclude noise
-
-            # Split data for Random Forest training
-            X_train, X_test, y_train, y_test = train_test_split(X_data_array, clusters_hdbscan, test_size=0.3, random_state=42)
-            
-            # Train Random Forest with number of clusters as estimators
-            rf = RandomForestClassifier(n_estimators=num_clusters, min_samples_split=min_cluster_size, random_state=42)
-            rf.fit(X_train, y_train)
-            
-            # Predict clusters for all data
-            y_pred_full = rf.predict(X_data_array)
-            X_cluster['cluster_randomforest'] = y_pred_full
-
-            # Calculate coherence
-            coherence = np.mean(y_pred_full == clusters_hdbscan)
-            print(f"Iteration {iter_count + 1} - Coherence: {coherence * 100:.2f}%")
-            
-            iter_count += 1
-
-        print(f"Final coherence: {coherence * 100:.2f}%")
+        
 
         #···························SAVE AND REPORT····························#
         # Save models
@@ -183,3 +192,15 @@ class STARS:
 
         # Write report
         report(best_params_hdbscan, num_clusters, counts_clusters, min_cluster_size, coherence,iter_count)
+
+    def doyourthing(self, filepath: str, db_id:int | None) -> None:
+    #·····························LOAD DATA······························#
+        self.data_csv = filepath
+        self.x_all = pd.read_csv(self.data_csv)   
+        self.x_data_array = self.x_all.to_numpy()
+        print(db_id,str(filepath))
+        self.tatis_while()
+
+if __name__ == "__main__":
+    instancia = STARS()
+    instancia.objective_hdbscan()

@@ -7,7 +7,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 import sql_table
 from STARS_Class import STARS
 
-path_csv = "../Streamlit_data/CSV/"
+path_csv = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/CSV/"
 
 def insert_model(correo, url_modelo=path_csv, estado=0) -> int | None:
     conn = sqlite3.connect('stars.db')
@@ -66,29 +66,34 @@ def main():
     )
     st. write('')
 
-    if st.button('Important'):
+    if st.button('Important',key=1):
         st.info('Please, make sure your categorical variables have been factorized and your data has been normalized and does not contain NaN or INF values. We recommend that you remove or deal with the outliers before submitting back the file.')
+
 
     # Widget para subir el archivo CSV
     email = st.text_input('Email address')
-    if st.button("submit email"):
-        uploaded_file: UploadedFile | None = st.file_uploader("Please upload your CVS file", type="csv")
+    
+    uploaded_file: UploadedFile | None = st.file_uploader("Please upload your CVS file", type="csv")
 
-        if uploaded_file is not None:
-            db_id=insert_model(email)
-            if st.button("patata"):
-                my_starts.doyourthing(path_csv, db_id)
-                temp_df = pd.read_csv(uploaded_file)
-                temp_df.to_csv(str(path_csv)+str(db_id)+'.csv',index=False)
-                
-            st.success('Well done!') 
-            st.write('Since data processing can be compute intensive, we do batch processing.') 
-            st.write('Once your request has been completed, we will get back to you, so please provide us with your email address.')
+    if uploaded_file is not None:
+        db_id=insert_model(email)
+        if st.button("patata"):
+            print(str(path_csv)+str(db_id)+'.csv')
+            temp_df: pd.DataFrame = pd.read_csv(uploaded_file)
+            try:
+                temp_df.to_csv(str(path_csv) + str(db_id) + '.csv', index=False)
+            except PermissionError as e:
+                st.error(f"No se pudo guardar el archivo: {e}")
+            my_starts.doyourthing(str(path_csv)+str(db_id)+'.csv', db_id)
             
-            # Collect email address
+        st.success('Well done!') 
+        st.write('Since data processing can be compute intensive, we do batch processing.') 
+        st.write('Once your request has been completed, we will get back to you, so please provide us with your email address.')
+    
+        # Collect email address
 
-        else:
-            pass
+    else:
+        pass
 
 if __name__ == "__main__":
     sql_table.init_db()
