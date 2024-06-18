@@ -50,7 +50,7 @@ def main():
     # Proporcionar enlace de descarga para el archivo CSV de ejemplo
     st.markdown(
         """
-        [Download CSV Template](https://drive.google.com/uc?export=download&id=15-RFpIMC1aBhnRPuQKnUpc3vccP8LZ3Q)
+        [Download CSV Template](https://drive.google.com/file/d/1jCy07vrcSK52uu0LswZ8CVuGMl1RVj8G/view?usp=drive_link)
         """, 
         unsafe_allow_html=True
     )
@@ -76,14 +76,23 @@ def main():
                 STARS(csv_path, db_id, email)
             except Exception as e:
                 st.error(f"Error processing the file: {e}")
-        st.write('Since data processing can be compute intensive, we do batch processing.')
-        st.write('Once your request has been completed, we will get back to you, so please provide us with your email address. Please, bear in mind that you will need your email address and your request ID in order to access the results.')
+        st.write('Since data processing can be compute intensive, we do batch processing. Please, give us some time to process your data.')
+        st.write('Once tasks are completed, results will be available in the tab "Results". In order to access them you will need your email address and your request ID.')
         
         
     elif not email:
         st.warning("Please provide an email address.")
     elif uploaded_file is None:
         st.warning("Please upload a CSV file.")
+
+
+st.write('What to expect from STARS?')
+st.write('Once your data has been processed, we will provide you the following files:')
+st.write('- bubble chart showing the clusters found by the unsupervised model HDBSCAN')
+st.write('- your CSV file with an extra column including the clusters found by the unsupervised model HDBSCAN')
+st.write('- your processed data')
+st.write('- a report including: HDBSCAN hyperparameters, clusters size and clusters found by HDBScan, Random Forest hyperparameters, coherence verification and number of iterations.')
+
 
 if __name__ == "__main__":
     sql_table.init_db()
