@@ -14,16 +14,19 @@ import seaborn as sns
 import streamlit as st
 from typing import Dict, Any, List
 import os
+import zipfile
+
 
 class STARS:
-    def __init__(self, data_file_path,db_id) -> None:
+    def __init__(self, data_file_path,db_id,email) -> None:
         print("init")
         # Init variables, counter and space of hyperparameters
-        self.path_files = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/results/"
+        self.path_files : str = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/results/"
         self.path_files += str(db_id)+'/'
+        self.db_id :str = str(db_id)
         if not os.path.exists(self.path_files):
             os.makedirs(self.path_files)
-        
+        self.email = email
         self.max_iter = 10
         self.coherence_threshold = 0.95
 
@@ -52,7 +55,8 @@ class STARS:
         clusterer = hdbscan.HDBSCAN(
             min_cluster_size=params[0],
             min_samples=params[1],
-            cluster_selection_epsilon=params[2]
+            cluster_selection_epsilon=params[2],
+            core_dist_n_jobs=11
         )
         labels = clusterer.fit_predict(self.x_data_array)
         
@@ -105,20 +109,21 @@ class STARS:
             # HDBSCAN with best parameters
             clusterer = hdbscan.HDBSCAN(**best_params_hdbscan)
             clusters_hdbscan = clusterer.fit_predict(self.x_data_array)
-
+            print("predicted...")
             # Calculate number of clusters and minimal cluster size
             unique_clusters, counts_clusters = np.unique(clusters_hdbscan, return_counts=True)
             num_clusters = max(len(unique_clusters) - 1, 1)  # Exclude noise cluster
             min_cluster_size = min(counts_clusters[counts_clusters > 1])  # Exclude noise
+            print("unique_clusters: "+str(num_clusters))
 
             # Split data for Random Forest training
             X_train, X_test, y_train, y_test = train_test_split(self.x_all, clusters_hdbscan, test_size=0.3, random_state=42)
             
             # Train Random Forest with number of clusters and it size as estimators
             rf: RandomForestClassifier = self.train_random_forest(X_train, y_train, num_clusters, min_cluster_size)
-            
             # Predict clusters for test data
             y_pred = rf.predict(X_test)
+            print("rf predicted...")
             X_test_df = pd.DataFrame(X_test, columns=self.x_all.columns)
             X_test_df['cluster_randomforest'] = y_pred
 
@@ -135,7 +140,18 @@ class STARS:
         
         # Save models and results
         self.save_results(best_params_hdbscan, num_clusters, min_cluster_size, counts_clusters, X_train, X_test_df, y_train, y_test, clusterer, rf)
+    
+    def comprimir_carpeta(self,carpeta_path:str,db_id:str) -> str:
+        # Nombre del archivo ZIP que se va a crear
         
+        # Crear un archivo ZIP
+        with zipfile.ZipFile(carpeta_path + db_id +".zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(carpeta_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    zipf.write(file_path, os.path.relpath(file_path, carpeta_path))
+                    
+        return carpeta_path + db_id +".zip"   
     # Function for save results
     def save_results(self, best_params_hdbscan: Dict[str, Any], num_clusters: int, min_cluster_size: int, counts_clusters: np.ndarray, 
                      X_train: np.ndarray, X_test_df: pd.DataFrame, y_train: np.ndarray, y_test: np.ndarray, 
@@ -165,6 +181,9 @@ class STARS:
         sns.scatterplot(data=cluster_means_real, x='_Glon', y='_Glat', size='Index', alpha=0.4, sizes=(10,5000), legend=False, color='#4c72b0')
         plt.savefig(self.path_files+'HDBSCAN_clusters.svg', format='svg', bbox_inches='tight')
 
+        archivo_zip: str = self.comprimir_carpeta(self.path_files,self.db_id)
+        print(f"Archivo ZIP creado: {archivo_zip}")
+
         # Write report
         readme_content = f"""
         HDBSCAN Hyperparameters:
@@ -185,6 +204,8 @@ class STARS:
 
         with open('README.txt', 'w') as f:
             f.write(readme_content)
+
+    
 
 # Esto es lo que hay que poner en app para hacer la instancia de la clase y que arranque
 # stars = STARS('data.csv')

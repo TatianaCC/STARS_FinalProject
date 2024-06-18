@@ -84,7 +84,7 @@ def main():
             except PermissionError as e:
                 st.error(f"No se pudo guardar el archivo: {e}")
             
-            STARS(str(path_csv)+str(db_id)+'.csv',db_id) 
+            STARS(str(path_csv)+str(db_id)+'.csv',db_id,email) 
             
         st.success('Well done!') 
         st.write('Since data processing can be compute intensive, we do batch processing.') 
