@@ -157,9 +157,9 @@ class STARS:
                      clusterer: hdbscan.HDBSCAN, rf: RandomForestClassifier) -> None:
         # Save models
         hdbscan_model_path = f"hdbscan-min_cluster_size_{best_params_hdbscan['min_cluster_size']}-min_samples_{best_params_hdbscan['min_samples']}-cluster_selection_epsilon_{best_params_hdbscan['cluster_selection_epsilon']:.2f}.pkl"
-        dump(clusterer, open(hdbscan_model_path, "wb"))
+        dump(clusterer, open(self.path_files+hdbscan_model_path, "wb"))
         rf_model_path = f"rf-num_clusters_{num_clusters}-min_cluster_size_{min_cluster_size}.pkl"
-        dump(rf, open(rf_model_path, "wb"))
+        dump(rf, open(self.path_files+rf_model_path, "wb"))
         
         # Save samples
         self.x_all.to_csv(self.path_files+'data_with_clusters.csv', index=False)
@@ -197,7 +197,7 @@ class STARS:
         Coherence: {self.coherence * 100:.2f}%
         Number of Iterations: {self.iter_count}
         """
-        with open('README.txt', 'w') as f:
+        with open(self.path_files+'README.txt', 'w') as f:
             f.write(readme_content)
 
         archivo_zip: str = self.comprimir_carpeta(self.path_files,self.db_id)
