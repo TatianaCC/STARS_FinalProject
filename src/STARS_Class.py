@@ -15,8 +15,17 @@ import streamlit as st
 from typing import Dict, Any, List
 import os
 
+
+# STARS_class.py 
 class STARS:
-    def __init__(self, data_file_path,db_id) -> None:
+    def __init__(self):
+        pass
+
+    def example_method(self):
+        return "Hello from STARS class!"
+
+class STARS:
+    def __init__(self, data_file_path,db_id, email) -> None:
         print("init")
         # Init variables, counter and space of hyperparameters
         self.path_files = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/results/"
