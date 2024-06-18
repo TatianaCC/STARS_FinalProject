@@ -7,15 +7,15 @@ Este proyecto tiene como objetivo, a partir de la introducción de una lista de 
 ![Figura 1: tipos de cúmulos.](./TiposCumulo.jpg)
 
 ## 1. Obtención de datos
-Los datos podrán buscarse en la base de datos VizieR (https://vizier.cds.unistra.fr/viz-bin/VizieR). Este es un portal donde se alojan de forma gratuita los datasets que los científicos usan para sus investigaciones. Los datos generalmente provienen de satélites y observatorios que hacen observaciones del cielo bucando objetos concretos. Algunas misiones se centran en galaxias, otras en supernovas, etc. En nuestro caso estamos buscando datos de estrellas concretas.
+Los datos podrán buscarse en la base de datos VizieR (https://vizier.cds.unistra.fr/viz-bin/VizieR). Este es un portal donde se alojan de forma gratuita los datasets que los científicos usan para sus investigaciones. Los datos generalmente provienen de satélites y observatorios que hacen observaciones del cielo buscando objetos concretos. Algunas misiones se centran en galaxias, otras en supernovas, etc. En nuestro caso estamos buscando datos de estrellas concretas.
 
-El mejor catálogo de estrellas actualmente es el obtenido por la misión Gaia, que en su última actualización es Gaia DR3. Esta misión mapea nuestra galaxia y obtiene características de cada estrella indicidual. En algunos casos estos datos serán más factibles de obtener y en otros casos la estrella está en un entorno de polvo o luz que no permite que se tome la medida. Actualmente este catálogo cuenta con casi 2millones de estrellas mapeadas. 
+El mejor catálogo de estrellas actualmente es el obtenido por la misión Gaia, que en su última actualización es Gaia DR3. Esta misión mapea nuestra galaxia y obtiene características de cada estrella individual. En algunos casos estos datos serán más factibles de obtener y en otros casos la estrella está en un entorno de polvo o luz que no permite que se tome la medida. Actualmente este catálogo cuenta con casi 2 millones de estrellas mapeadas. 
 
-Para escoger estrellas que pertenezcan a cúmulos, ya sean abiertos o cerrados, nos fijaremos en trabajos previos de investigadores que hayan hecho una selección aproximada de estrellas para uno o varios cumulos en concreto. 
+Para escoger estrellas que pertenezcan a cúmulos, ya sean abiertos o cerrados, nos fijaremos en trabajos previos de investigadores que hayan hecho una selección aproximada de estrellas para uno o varios cúmulos en concreto. 
 1. Tomaremos de sus samples de datos las coordenadas de las estrellas y el cúmulo al que pertenecen.
-2. Unificaremos todas las estrellas en un únido dataset.
+2. Unificaremos todas las estrellas en un único dataset.
 > Esto está en Clusters.csv
-3. Unificaremos los nombres de los cúmulos, ya que puede estar el mismo cumulo repetidamente, con nombres diferentes. Para ello:
+3. Unificaremos los nombres de los cúmulos, ya que el mismo cúmulo puede aparecer repetidamente pero con nombres diferentes. Para ello:
    1. Haremos una tabla de equivalencia de nombres en los diferentes catálogos.
    > Esta tabla es NamesCatalogEquivalence.csv
    2. Unificaremos los nombres de nuestras estrellas bajo el mismo catálogo.
@@ -33,10 +33,10 @@ Para escoger estrellas que pertenezcan a cúmulos, ya sean abiertos o cerrados, 
 Comenzaremos el EDA haciendo una exploración general del dataset para luego pasar a hacer el tratamiento de outliers cúmulo a cúmulo. Nuestra target es la columna 'Clusters', siendo el resto de columnas las predictoras.
 
 ### 2.1 Exploración general
-En BuildData se encuentra la descripción de las columnas de nuestro dataset. A partir de aqui:
+En BuildData se encuentra la descripción de las columnas de nuestro dataset. A partir de aquí:
 
 1. Se eliminan la columnas repetidas
-2. Se elimnan las predictoras que estamos seguros que son innecesarias para nuestro objetivo
+2. Se eliminan las predictoras que estamos seguros de que son innecesarias para nuestro objetivo
 3. Se hace una limpieza general de datos en base a algunas columnas
 4. Se realiza el tratamiento de valores nulos
 5. Se eliminan totalmente los cúmulos que hayan quedado con un número de estrellas muy bajo, insuficiente para un tratamiento posterior.
@@ -53,17 +53,17 @@ Dado que en nuestro dataset tenemos datos de diferentes cúmulos que se encuentr
 3. Rearmaremos el dataset.
 
 #### 2.3.1 Búsqueda de outliers
-Dado que los cúmulos son grupos de estrellas que se formaron más o menos a la vez a partir de a misma nube de gas, las estrellas que lo componen compartirán (ordenados de mayor a menor concordancia):
+Dado que los cúmulos son grupos de estrellas que se formaron más o menos a la vez a partir de la misma nube de gas, las estrellas que lo componen compartirán (ordenados de mayor a menor concordancia):
 - Edad: todas tendrán una edad similar.
 - Movimientos propios: todas se moverán más o menos de la misma forma alrededor del centro galáctico. Para estudiar esto se usa pmRA y pmDE.
-- Metalicidad: ya que todas han nacido a partir de la misma nube, todas tendrán más o menos la misma proporción de cada elemento químico. Sin embargo esto no tiene porque sé cumplirse si se han formado estrellas de masas diferentes que producirán elemenos pesados a diferentes ritmos.
+- Metalicidad: ya que todas han nacido a partir de la misma nube, todas tendrán más o menos la misma proporción de cada elemento químico. Sin embargo, esto no tiene por qué cumplirse si se han formado estrellas de masas diferentes que producirán elementos pesados a diferentes ritmos.
 - Masa: todas tendrán una masa similar.
 - Luminosidad y color: si las estrellas tienen una masa similar, tendrán también una luminosidad y un color similares.
-- Posición: todas las estrellas tendrán una posición parecida. Sin embargo esto es más acertado para cúmulos globulares, ya que las estrellas están muy juntas, que para cúmulos abiertos, donde las estrellas han podido disgregarse mucho.
+- Posición: todas las estrellas tendrán una posición parecida. Sin embargo, esto es más acertado para cúmulos globulares, ya que las estrellas están muy juntas, que para cúmulos abiertos, donde las estrellas han podido disgregarse mucho.
 
-Es posible que en nuestra selección de estrellas tengamos estrellas que aparentemente pertenecen el grupo del cúmulo, pero que en realidad no es hermana del resto. Estas estrellas infiltradas aparecerán como outliers en las variables antes descritas y el tratamiento correcto es la eliminación del dataset.
+Es posible que en nuestra selección de estrellas tengamos estrellas que aparentemente pertenecen el grupo del cúmulo, pero que en realidad no son hermanas del resto. Estas estrellas infiltradas aparecerán como outliers en las variables antes descritas y el tratamiento correcto es su eliminación del dataset.
 
-> Para este trabajo (repetitivo con cada grupo), podemos hacerlo una vez para un cúmulo, poniendo todo bonito y las gráficas chulas y eso luego usar eso para hacer una librería que usar con el resto de cúmulos para ahorrar trabajo.
+> Para este trabajo (repetitivo con cada grupo), podemos hacerlo una vez para un cúmulo, y luego usar eso para hacer una librería que usar con el resto de cúmulos para ahorrar trabajo.
 
 ## Datasets
 
