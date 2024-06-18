@@ -11,6 +11,7 @@ import hdbscan
 from pickle import dump
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sqlalchemy import null
 import streamlit as st
 from typing import Dict, Any, List
 import os
@@ -51,13 +52,14 @@ class STARS:
 
     # Function objective for optimization
     def evaluate_hdbscan(self, params: List[Any]) -> float:
-        clusterer = hdbscan.HDBSCAN(
+        self.clusterer = hdbscan.HDBSCAN(
             min_cluster_size=params[0],
             min_samples=params[1],
             cluster_selection_epsilon=params[2],
             core_dist_n_jobs=11
         )
-        labels = clusterer.fit_predict(self.x_data_array)
+        
+        labels = self.clusterer.fit_predict(self.x_data_array)
         
         # Not taking into account noise before calculating the score
         valid_labels = labels[labels != -1]
@@ -66,11 +68,12 @@ class STARS:
         else:
             score = -1.0  # If there are only one cluster or noise
 
+        print("score: ",str(score))
         return -score  # Return negative of score
 
     # Function for get best params of HDBSCAN optimization
     def optimize_hdbscan(self) -> Dict[str, Any]:
-        res_hdbscan = gp_minimize(self.evaluate_hdbscan, self.space_hdbscan, n_calls=50, random_state=42)
+        res_hdbscan = gp_minimize(self.evaluate_hdbscan, self.space_hdbscan, n_calls=100, random_state=42)
         
         if res_hdbscan is not None and hasattr(res_hdbscan, 'x'):
             best_params_hdbscan = dict(zip([dim.name for dim in self.space_hdbscan], res_hdbscan.x))
@@ -88,57 +91,49 @@ class STARS:
 
     # Loop function
     def optimize_loop(self) -> None:
-        best_params_hdbscan = {}
-        num_clusters = 0
-        min_cluster_size = 0
-        counts_clusters = np.array([])
-        clusters_hdbscan = np.array([])
-        X_train = np.array([])
-        X_test_df = pd.DataFrame()
-        y_train = np.array([])
-        y_test = np.array([])
-        clusterer = hdbscan.HDBSCAN()
-        rf: RandomForestClassifier = RandomForestClassifier(random_state=42)
+        
         print("pre-while")
-        while self.coherence < self.coherence_threshold and self.iter_count < self.max_iter:
-            print("loop: ", self.iter_count)
-            # HDBSCAN optimization
-            best_params_hdbscan: Dict[str, Any] = self.optimize_hdbscan()
-            
-            # HDBSCAN with best parameters
-            clusterer = hdbscan.HDBSCAN(**best_params_hdbscan)
-            clusters_hdbscan = clusterer.fit_predict(self.x_data_array)
-            print("predicted...")
-            # Calculate number of clusters and minimal cluster size
-            unique_clusters, counts_clusters = np.unique(clusters_hdbscan, return_counts=True)
-            num_clusters = max(len(unique_clusters) - 1, 1)  # Exclude noise cluster
-            min_cluster_size = min(counts_clusters[counts_clusters > 1])  # Exclude noise
-            print("unique_clusters: "+str(num_clusters))
+        
+        print("loop: ", self.iter_count)
+        best_params_hdbscan: Dict[str, Any] = self.optimize_hdbscan()
+        # HDBSCAN optimization
+        print("patata")
+        print(best_params_hdbscan)
+        # HDBSCAN with best parameters
+        self.clusterer = hdbscan.HDBSCAN(**best_params_hdbscan)
+        clusters_hdbscan = self.clusterer.fit_predict(self.x_data_array)
+        print("predicted...")
+        # Calculate number of clusters and minimal cluster size
+        unique_clusters, counts_clusters = np.unique(clusters_hdbscan, return_counts=True)
+        num_clusters = max(len(unique_clusters) - 1, 1)  # Exclude noise cluster
+        min_cluster_size = min(counts_clusters[counts_clusters > 1])  # Exclude noise
+        print("unique_clusters: "+str(num_clusters))
 
-            # Split data for Random Forest training
-            X_train, X_test, y_train, y_test = train_test_split(self.x_all, clusters_hdbscan, test_size=0.3, random_state=42)
-            
-            # Train Random Forest with number of clusters and it size as estimators
-            rf: RandomForestClassifier = self.train_random_forest(X_train, y_train, num_clusters, min_cluster_size)
-            # Predict clusters for test data
-            y_pred = rf.predict(X_test)
-            print("rf predicted...")
-            X_test_df = pd.DataFrame(X_test, columns=self.x_all.columns)
-            X_test_df['cluster_randomforest'] = y_pred
+        # Split data for Random Forest training
+        X_train, X_test, y_train, y_test = train_test_split(self.x_all, clusters_hdbscan, test_size=0.3, random_state=42)
+        
+        # Train Random Forest with number of clusters and it size as estimators
+        rf: RandomForestClassifier = self.train_random_forest(X_train, y_train, num_clusters, min_cluster_size)
+        # Predict clusters for test data
+        y_pred = rf.predict(X_test)
+        print("rf predicted...")
+        X_test_df = pd.DataFrame(X_test, columns=self.x_all.columns)
+        X_test_df['cluster_randomforest'] = y_pred
 
-            # Calculate coherence
-            self.coherence = np.mean(y_pred == y_test)
-            print(f"Iteration {self.iter_count + 1} - Coherence: {self.coherence * 100:.2f}%")
-            
-            self.iter_count += 1
+        # Calculate coherence
+        self.coherence = np.mean(y_pred == y_test)
+        print(f"Iteration {self.iter_count + 1} - Coherence: {self.coherence * 100:.2f}%")
+        
+        self.iter_count += 1
             
         # Store clusters back into X_all and identify noise
         self.x_all['cluster_hdbscan'] = clusters_hdbscan
 
         print(f"Final coherence: {self.coherence * 100:.2f}%")
         
+        
         # Save models and results
-        self.save_results(best_params_hdbscan, num_clusters, min_cluster_size, counts_clusters, X_train, X_test_df, y_train, y_test, clusterer, rf)
+        self.save_results(best_params_hdbscan, num_clusters, min_cluster_size, counts_clusters, X_train, X_test_df, y_train, y_test, self.clusterer, rf)
     
     def comprimir_carpeta(self,carpeta_path:str,db_id:str) -> str:
         # Nombre del archivo ZIP que se va a crear

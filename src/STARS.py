@@ -43,8 +43,8 @@ def main():
     st.image(img_url, use_column_width=False)
 
     # Contenido de la aplicación
-    st.subheader('Discover structures in your star collection')
-    st.write('')
+    st.write('## Stellar Association Recognition System')
+    st.write('##### Discover structures in your star collection')
     st.write('Download the following CSV file and fill in the variables required for each star.')  
 
     # Proporcionar enlace de descarga para el archivo CSV de ejemplo
@@ -60,38 +60,37 @@ def main():
         st.info('Please, make sure your categorical variables have been factorized and your data has been normalized and does not contain NaN or INF values. We recommend that you remove or deal with the outliers before submitting back the file.')
 
     # Widget para subir el archivo CSV
-    email = st.text_input('Email address')
+    Name = st.text_input('Name')
     uploaded_file: UploadedFile | None = st.file_uploader("Please upload your CSV file", type="csv")
 
-    if uploaded_file is not None and email:
+    if uploaded_file is not None and Name:
         # Inserta el modelo en la base de datos y obtiene el ID antes del procesamiento
         
         if st.button("Submit", key="submit_button"):
-            db_id = insert_model(email, url_modelo=path_CSV)
+            db_id = insert_model(Name, url_modelo=path_CSV)
             csv_path = f"{path_CSV}{db_id}.csv"
             st.success(f"Your request ID will be: {db_id}")# Mostrar el botón de "Submit" solo si hay un archivo subido
             temp_df: pd.DataFrame = pd.read_csv(uploaded_file)
             temp_df.to_csv(csv_path, index=False)
             try:
-                STARS(csv_path, db_id, email)
+                STARS(csv_path, db_id, Name)
             except Exception as e:
                 st.error(f"Error processing the file: {e}")
         st.write('Since data processing can be compute intensive, we do batch processing. Please, give us some time to process your data.')
-        st.write('Once tasks are completed, results will be available in the tab "Results". In order to access them you will need your email address and your request ID.')
+        st.write('Once tasks are completed, results will be available in the tab "Results". In order to access them you will need your Name address and your request ID.')
         
         
-    elif not email:
-        st.warning("Please provide an email address.")
-    elif uploaded_file is None:
+    if uploaded_file is None:
         st.warning("Please upload a CSV file.")
 
 
-st.write('What to expect from STARS?')
-st.write('Once your data has been processed, we will provide you the following files:')
-st.write('- bubble chart showing the clusters found by the unsupervised model HDBSCAN')
-st.write('- your CSV file with an extra column including the clusters found by the unsupervised model HDBSCAN')
-st.write('- your processed data')
-st.write('- a report including: HDBSCAN hyperparameters, clusters size and clusters found by HDBScan, Random Forest hyperparameters, coherence verification and number of iterations.')
+    st.write('')
+    st.write('What to expect from STARS?')
+    st.write('Once your data has been processed, we will provide you the following files:')
+    st.write('- Bubble chart showing the clusters found by the unsupervised model HDBSCAN')
+    st.write('- Your CSV file with an extra column including the clusters found by the unsupervised model HDBSCAN')
+    st.write('- Your processed data')
+    st.write('- A report including: HDBSCAN hyperparameters, clusters size and clusters found by HDBScan, Random Forest hyperparameters, coherence verification and number of iterations.')
 
 
 if __name__ == "__main__":

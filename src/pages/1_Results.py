@@ -16,17 +16,17 @@ def main():
     st.image(img_url, use_column_width=False)
     
     st.title("Welcome back!")
-    st.write('Please write your email and request ID in the fields below in order to check if your request has been processed and download the results.')
+    st.write('Please write your Name and request ID in the fields below in order to check if your request has been processed and download the results.')
 
     # Campos de entrada para correo electrónico y ID de solicitud
-    email: str = st.text_input('Email address')
-    request_id: str = st.text_input('Request ID')
+    Name: str = st.text_input('Name:')
+    request_id: str = st.text_input('Request ID:')
 
     # Ruta al archivo ZIP que deseas ofrecer para descargar
-    archivo_zip_path = path_results + request_id+"/"+request_id+"_"+email+".zip"  # Asegúrate de que el archivo ZIP exista en esta ruta
+    archivo_zip_path = path_results + request_id+"/"+request_id+"_"+Name+".zip"  # Asegúrate de que el archivo ZIP exista en esta ruta
     
     # Verifica si ambos campos tienen datos antes de mostrar el botón
-    if email and request_id:
+    if Name and request_id:
         try:
             # Lee el contenido del archivo ZIP
             with open(archivo_zip_path, "rb") as file:
@@ -36,7 +36,7 @@ def main():
             st.download_button(
                 label="Download",
                 data=file_bytes,
-                file_name=request_id+"_"+email+".zip",
+                file_name=request_id+"_"+Name+".zip",
                 mime="application/zip"
             )
         except FileNotFoundError:
