@@ -5,7 +5,7 @@ import io
 
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 import sql_table
-from STARS_Class import STARS
+from STARS_class import STARS
 
 path_csv = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/CSV/"
 
@@ -38,7 +38,7 @@ def get_all_models():
     return rows
 
 def main():
-    my_starts = STARS()
+    
     # Insertar una imagen desde una URL
     img_url = 'https://i.postimg.cc/zXm6DHwr/imagen-nueva2-1.jpg'  # Inserta la URL de tu imagen aquí
     st.image(img_url, use_column_width=False)
@@ -74,17 +74,17 @@ def main():
     email = st.text_input('Email address')
     
     uploaded_file: UploadedFile | None = st.file_uploader("Please upload your CVS file", type="csv")
-
     if uploaded_file is not None:
         db_id=insert_model(email)
         if st.button("patata"):
             print(str(path_csv)+str(db_id)+'.csv')
             temp_df: pd.DataFrame = pd.read_csv(uploaded_file)
             try:
-                temp_df.to_csv(str(path_csv) + str(db_id) + '.csv', index=False)
+                temp_df.to_csv(str(path_csv) + str(db_id) + '.csv')
             except PermissionError as e:
                 st.error(f"No se pudo guardar el archivo: {e}")
-            my_starts.doyourthing(str(path_csv)+str(db_id)+'.csv', db_id)
+            
+            STARS(str(path_csv)+str(db_id)+'.csv',db_id) 
             
         st.success('Well done!') 
         st.write('Since data processing can be compute intensive, we do batch processing.') 
