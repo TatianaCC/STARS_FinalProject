@@ -180,9 +180,6 @@ class STARS:
         sns.scatterplot(data=cluster_means_real, x='_Glon', y='_Glat', size='Index', alpha=0.4, sizes=(10,5000), legend=False, color='#4c72b0')
         plt.savefig(self.path_files+'HDBSCAN_clusters.svg', format='svg', bbox_inches='tight')
 
-        archivo_zip: str = self.comprimir_carpeta(self.path_files,self.db_id)
-        print(f"Archivo ZIP creado: {archivo_zip}")
-
         # Write report
         readme_content = f"""
         HDBSCAN Hyperparameters:
@@ -200,11 +197,12 @@ class STARS:
         Coherence: {self.coherence * 100:.2f}%
         Number of Iterations: {self.iter_count}
         """
-
         with open('README.txt', 'w') as f:
             f.write(readme_content)
 
-    
+        archivo_zip: str = self.comprimir_carpeta(self.path_files,self.db_id)
+        print(f"Archivo ZIP creado: {archivo_zip}")
+   
 
 # Esto es lo que hay que poner en app para hacer la instancia de la clase y que arranque
 # stars = STARS('data.csv')
