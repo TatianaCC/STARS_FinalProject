@@ -16,7 +16,7 @@ def main():
     st.image(img_url, use_column_width=False)
     
     st.title("Welcome back!")
-    st.write('Your request has been processed. Please write your email and request ID in the fields below in order to download the results.')
+    st.write('Please write your email and request ID in the fields below in order to check if your request has been processed and download the results.')
 
     # Campos de entrada para correo electrónico y ID de solicitud
     email: str = st.text_input('Email address')
@@ -40,11 +40,11 @@ def main():
                 mime="application/zip"
             )
         except FileNotFoundError:
-            st.error("El resultado aun no esta listo.")
+            st.error("Your data has not been processed yet.")
         except PermissionError:
-            st.error("Ups, no encontramos esta prueba.")
+            st.error("Oops, we do not have any request with this ID.")
         except Exception as e:
-            st.error(f"Se produjo un error inesperado: {e}")
+            st.error(f"Unexpected error: {e}")
 
 # Ejecutar la aplicación de Streamlit
 if __name__ == "__main__":
