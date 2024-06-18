@@ -5,7 +5,17 @@ import io
 
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 import sql_table
-from STARS_class import STARS
+import sys
+import os
+from STARS_Class import STARS
+
+# Set the page configuration
+st.set_page_config(
+    page_title="Hello",
+    layout="centered",  # Optional: can be "centered" or "wide"
+    initial_sidebar_state="auto"  # Optional: can be "auto", "expanded", "collapsed"
+)
+
 
 path_csv = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/CSV/"
 
@@ -43,14 +53,7 @@ def main():
     img_url = 'https://i.postimg.cc/zXm6DHwr/imagen-nueva2-1.jpg'  # Inserta la URL de tu imagen aquí
     st.image(img_url, use_column_width=False)
 
-    # "with" notation
-    with st.sidebar:
-        st.image("https://i.postimg.cc/ZnNzV13B/logo2.jpg", use_column_width=True)
-        
-        st.title('Stellar')
-        st.title('Association')
-        st.title('Recognition')
-        st.title('System')
+    
         
     # Contenido de la aplicación
     st.subheader('Discover structures in your star collection')
@@ -76,7 +79,7 @@ def main():
     uploaded_file: UploadedFile | None = st.file_uploader("Please upload your CVS file", type="csv")
     if uploaded_file is not None:
         db_id=insert_model(email)
-        if st.button("patata"):
+        if st.button("Submit"):
             print(str(path_csv)+str(db_id)+'.csv')
             temp_df: pd.DataFrame = pd.read_csv(uploaded_file)
             try:
@@ -84,11 +87,11 @@ def main():
             except PermissionError as e:
                 st.error(f"No se pudo guardar el archivo: {e}")
             
-            STARS(str(path_csv)+str(db_id)+'.csv',db_id,email) 
+            STARS(str(path_csv)+str(db_id)+'.csv',db_id, email) 
             
-        st.success('Well done!') 
+        st.success(f"Well done! Your request ID is {db_id}.") 
         st.write('Since data processing can be compute intensive, we do batch processing.') 
-        st.write('Once your request has been completed, we will get back to you, so please provide us with your email address.')
+        st.write('Once your request has been completed, we will get back to you, so please provide us with your email address. Please, bear in mind that you will need your email address and your request ID in order to access the results.')
     
         # Collect email address
 

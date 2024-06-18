@@ -17,6 +17,15 @@ import os
 import zipfile
 
 
+
+# STARS_class.py 
+class STARS:
+    def __init__(self):
+        pass
+
+    def example_method(self):
+        return "Hello from STARS class!"
+
 class STARS:
     def __init__(self, data_file_path,db_id,email) -> None:
         print("init")
