@@ -16,16 +16,6 @@ from typing import Dict, Any, List
 import os
 import zipfile
 
-
-
-# STARS_class.py 
-class STARS:
-    def __init__(self):
-        pass
-
-    def example_method(self):
-        return "Hello from STARS class!"
-
 class STARS:
     def __init__(self, data_file_path,db_id,email) -> None:
         print("init")
@@ -154,7 +144,7 @@ class STARS:
         # Nombre del archivo ZIP que se va a crear
         
         # Crear un archivo ZIP
-        with zipfile.ZipFile(carpeta_path + db_id +".zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
+        with zipfile.ZipFile(carpeta_path + db_id + "_"+ self.email +".zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(carpeta_path):
                 for file in files:
                     file_path = os.path.join(root, file)

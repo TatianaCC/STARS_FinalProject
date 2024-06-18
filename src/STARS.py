@@ -11,15 +11,15 @@ from STARS_Class import STARS
 
 # Set the page configuration
 st.set_page_config(
-    page_title="Hello",
+    page_title="STARS_Proyect",
     layout="centered",  # Optional: can be "centered" or "wide"
     initial_sidebar_state="auto"  # Optional: can be "auto", "expanded", "collapsed"
 )
 
 
-path_csv = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/CSV/"
+path_CSV = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/CSV"
 
-def insert_model(correo, url_modelo=path_csv, estado=0) -> int | None:
+def insert_model(correo, url_modelo=path_CSV, estado=0) -> int | None:
     conn = sqlite3.connect('stars.db')
     c = conn.cursor()
     # Obtener el último ID de la tabla models
@@ -80,14 +80,14 @@ def main():
     if uploaded_file is not None:
         db_id=insert_model(email)
         if st.button("Submit"):
-            print(str(path_csv)+str(db_id)+'.csv')
+            print(str(path_CSV)+str(db_id)+'.csv')
             temp_df: pd.DataFrame = pd.read_csv(uploaded_file)
             try:
-                temp_df.to_csv(str(path_csv) + str(db_id) + '.csv')
+                temp_df.to_csv(str(path_CSV) + str(db_id) + '.csv')
             except PermissionError as e:
                 st.error(f"No se pudo guardar el archivo: {e}")
             
-            STARS(str(path_csv)+str(db_id)+'.csv',db_id, email) 
+            STARS(str(path_CSV)+str(db_id)+'.csv',db_id, email) 
             
         st.success(f"Well done! Your request ID is {db_id}.") 
         st.write('Since data processing can be compute intensive, we do batch processing.') 
