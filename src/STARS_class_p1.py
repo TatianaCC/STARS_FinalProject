@@ -31,7 +31,7 @@ class STARS:
             os.makedirs(self.path_files)
         self.email = email
         self.max_iter = 10
-        self.coherence_threshold = 0.95
+        self.coherence_threshold = -0.95
         
         self.weight_silhouette = 0.04
         self.weight_coherence = 0.96
@@ -47,7 +47,7 @@ class STARS:
         self.x_all = self.load_data(data_file_path)
         self.x_data_array = self.x_all.to_numpy()
         print("Optimizing HDBSCAN")
-        self.best_params_hdbscan = self.optimize_hdbscan()
+        self.optimize_hdbscan()
         self.run()
         
     # Function for load data
@@ -95,15 +95,16 @@ class STARS:
         return weighted_score
 
     def callback(self,res):
-        print(res.fun)
-        if res.fun>= 0.95:
-            print(f'Weighted_score >= 0.95 after {res.n_iters} iters.')
+        print('Current best score:', res.fun)
+        if res.fun <= self.coherence_threshold:
             return True
 
     # Function for get best params of HDBSCAN optimization
     def optimize_hdbscan(self) -> Dict[str, Any]:
-        res_hdbscan = gp_minimize(self.evaluate_hdbscan, self.space_hdbscan, n_calls=100, random_state=42)
-        
+        res_hdbscan = gp_minimize(self.evaluate_hdbscan, self.space_hdbscan, n_calls=100, random_state=42, callback= [self.callback])
+       
+        print('patata')       
+
         if res_hdbscan is not None and hasattr(res_hdbscan, 'x'):
             self.best_params_hdbscan = dict(zip([dim.name for dim in self.space_hdbscan], res_hdbscan.x))
         else:
@@ -119,9 +120,8 @@ class STARS:
 
     # Loop function
     def run(self) -> None:
-        if self.best_params_hdbscan in None:
-            print('Params not found')
-            return
+        print(self.best_params_hdbscan)
+        
         # HDBSCAN with best parameters
         self.clusterer = hdbscan.HDBSCAN(**self.best_params_hdbscan)
         print("Apply HDBSCAN")
@@ -131,7 +131,7 @@ class STARS:
         unique_clusters, counts_clusters = np.unique(clusters_hdbscan, return_counts=True)
         num_clusters = max(len(unique_clusters) - 1, 1)  # Exclude noise cluster
         min_cluster_size = min(counts_clusters[counts_clusters > 1])  # Exclude noise
-        print("Number of founded clusters: " + str(num_clusters))
+        print("Number of found clusters: " + str(num_clusters))
         
         # Split data for Random Forest training
         X_train, X_test, y_train, y_test = train_test_split(self.x_all, clusters_hdbscan, test_size=0.3, random_state=42)
@@ -149,8 +149,8 @@ class STARS:
         self.x_all['cluster_hdbscan'] = clusters_hdbscan
         
         # Calculate coherence
-        coherence = np.mean(y_pred == y_test)
-        print(f"Final coherence: {coherence * 100:.2f}%")
+        self.coherence = np.mean(y_pred == y_test)
+        print(f"Final coherence: {self.coherence * 100:.2f}%")
        
         # Save models and results
         self.save_results(self.best_params_hdbscan, num_clusters, min_cluster_size, counts_clusters, X_train, X_test_df, y_train, y_test, self.clusterer, rf)
@@ -193,7 +193,7 @@ class STARS:
 
         plt.figure(figsize=(20, 8))
         sns.scatterplot(data=cluster_means_real, x='_Glon', y='_Glat', size='Index', alpha=0.4, sizes=(10,5000), legend=False, color='#4c72b0')
-        sns.scatterplot(data=self.x_all, x='_Glon', y='_Glat', hue='cluster_hdbscan', palette='orange', legend=False)        
+        sns.scatterplot(data=self.x_all, x='_Glon', y='_Glat', hue='cluster_hdbscan', palette='rocket', legend=False)        
         plt.savefig(self.path_files+'HDBSCAN_clusters.svg', format='svg', bbox_inches='tight')
 
         # Write report
