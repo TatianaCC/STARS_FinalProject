@@ -68,7 +68,7 @@ class STARS:
         else:
             score = -1.0  # If there are only one cluster or noise
 
-        print("score: ",str(score))
+        #print("score: ",str(score))
         return -score  # Return negative of score
 
     # Function for get best params of HDBSCAN optimization
