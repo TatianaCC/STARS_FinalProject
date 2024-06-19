@@ -77,7 +77,7 @@ def main():
             except Exception as e:
                 st.error(f"Error processing the file: {e}")
         st.write('Since data processing can be compute intensive, we do batch processing. Please, give us some time to process your data.')
-        st.write('Once tasks are completed, results will be available in the tab "Results". In order to access them you will need your Name address and your request ID.')
+        st.write('Once tasks are completed, results will be available in the tab "Results". In order to access them you will need your Name and your request ID.')
         
         
     if uploaded_file is None:
