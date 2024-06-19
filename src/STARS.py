@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="auto"  # Optional: can be "auto", "expanded", "collapsed"
 )
 
-path_CSV = "C:/Users/Silvia/vs_projects/STARS_FinalProject/data/Streamlit_data/CSV/"
+path_CSV = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/CSV/"
 
 def insert_model(correo, url_modelo, estado=0) -> int | None:
     conn = sqlite3.connect('stars.db')
@@ -72,10 +72,8 @@ def main():
             st.success(f"Your request ID will be: {db_id}")# Mostrar el botón de "Submit" solo si hay un archivo subido
             temp_df: pd.DataFrame = pd.read_csv(uploaded_file)
             temp_df.to_csv(csv_path, index=False)
-            try:
-                STARS(csv_path, db_id, Name)
-            except Exception as e:
-                st.error(f"Error processing the file: {e}")
+            
+            STARS(csv_path, db_id, Name)
         st.write('Since data processing can be compute intensive, we do batch processing. Please, give us some time to process your data.')
         st.write('Once tasks are completed, results will be available in the tab "Results". In order to access them you will need your Name and your request ID.')
         

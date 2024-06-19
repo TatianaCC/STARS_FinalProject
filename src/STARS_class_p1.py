@@ -17,7 +17,7 @@ class STARS:
     def __init__(self, data_file_path,db_id,email) -> None:
         print("init")
         # Init variables, counter and space of hyperparameters
-        self.path_files : str = "C:/Users/Silvia/vs_projects/STARS_FinalProject/data/Streamlit_data/results/"
+        self.path_files : str = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/results/"
         self.path_files += str(db_id)+'/'
         self.db_id :str = str(db_id)
         if not os.path.exists(self.path_files):
@@ -32,7 +32,7 @@ class STARS:
         self.space_hdbscan = [
             Integer(5, 22, name='min_cluster_size'),
             Integer(1, 20, name='min_samples'),
-            Real(0.0, 0.5, name='cluster_selection_epsilon')
+            Real(0.0, 0.3, name='cluster_selection_epsilon')
         ]
         
         # Load data
@@ -73,7 +73,9 @@ class STARS:
 
         # Train Random Forest with number of clusters and its size as estimators
         num_clusters = max(len(np.unique(labels)) - 1, 1)  # Exclude noise cluster
-        min_cluster_size = min([c for c in np.bincount(labels) if c > 1])  # Exclude noise
+        cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise
+        min_cluster_size = min([c for c in cluster_sizes if c > 1]) if len(cluster_sizes) > 0 else 1
+    
         rf: RandomForestClassifier = self.train_random_forest(X_train, y_train, num_clusters, min_cluster_size)
 
         # Predict clusters for test data
@@ -93,7 +95,7 @@ class STARS:
             return True
 
     # Function for get best params of HDBSCAN optimization
-    def optimize_hdbscan(self) -> Dict[str, Any]:
+    def optimize_hdbscan(self):
         res_hdbscan = gp_minimize(self.evaluate_hdbscan, self.space_hdbscan, n_calls=100, random_state=42, callback= [self.callback])
        
         print('patata')       
@@ -185,8 +187,16 @@ class STARS:
         }).reset_index()
 
         plt.figure(figsize=(20, 8))
+
+        plt.figure(figsize=(20, 8))
+        # Create scatter plot with colors based on clusters
+        scatter_plot = sns.scatterplot(data=self.x_all, x='_Glon', y='_Glat', hue='cluster_hdbscan', palette='tab10', legend='full')        
         sns.scatterplot(data=cluster_means_real, x='_Glon', y='_Glat', size='Index', alpha=0.4, sizes=(10,5000), legend=False, color='#4c72b0')
-        sns.scatterplot(data=self.x_all, x='_Glon', y='_Glat', hue='cluster_hdbscan', palette='rocket', legend=False)        
+
+        # Customize legend
+        handles, labels = scatter_plot.get_legend_handles_labels()
+        scatter_plot.legend(handles=handles, labels=labels, title='Clusters')
+        
         plt.savefig(self.path_files+'HDBSCAN_clusters.svg', format='svg', bbox_inches='tight')
 
         # Write report
