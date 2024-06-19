@@ -168,6 +168,8 @@ Una vez el modelo se haya ejecutado, el usuario podrá descargar sus resultados 
 8. STARSSample_EDA2: dataset STARSSample_EDA1 tras pasar por el punto 2.3.1
 9. STARSSample_norm: dataset STARSSample normalizado
 
+##GoogleDrive
+https://drive.google.com/drive/folders/1ac8yV0D-KNRFOH3jnlYUnNfeU6bkZc8S
 
 ## Apéndice 1: Menciones
 - LAMOST candidate members of star clusters (Xiang+, 2015)
