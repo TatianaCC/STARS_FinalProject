@@ -141,8 +141,8 @@ Haber realizado todas estas pruebas con muchos conjuntos de valores y con los 3 
 A continuación, se muestra el diagrama de flujo que sigue STARS_class.py y que cumple las siguientes funciones:
 1. Encuentra estructuras con HDBSCAN
 2. Valida el clustering con un modelo supervisado de clasificación Random Forest
-3. Itera haciendo una optimización bayesiana (centrada en la métrica silhouette_score) de HDBSCAN
-4. Se detiene cuando la coherencia entre los resultados de ambos modelos es mayor o igual a 95% o en 10 iteraciones.
+3. Itera haciendo una optimización bayesiana (centrada en la métrica silhouette_score y la coherencia) de HDBSCAN
+4. Se detiene cuando el score ponderado es mayor o igual a 95% o en 100 iteraciones.
 5. Exporta los resultados, gráficas, datasets y README con información.
 
 ![Figura 4: Diagrama de flujo.](./flow.png)
