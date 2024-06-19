@@ -123,7 +123,7 @@ Para alcanzar esta coherencia usaremos nos decantamos por una optimización baye
 2. Es más eficiente que grid_search o random_search porque requiere menos evaluaciones
 3. Se enfoca hacia las regiones de hiperparámetros más prometedoras gracias a una evaluación estadística que le permite tener en cuenta más información
 
-La función objetivo de la optimización bayesiana se centra en el valor de la métrica silhouette_score que evalúa la calidad y separación de los clusteres.
+La función objetivo de la optimización bayesiana se centra en una ponderación del valor de la métrica silhouette_score (que evalúa la calidad y separación de los clusteres) y la coherencia, dando más importancia a ésta última.
 
 ### 5.1 Selección del espacio de hiperparámetros
 Dado los altos tiempos de ejecución es vital seleccionar un buen espacio de hiperparámetros para la optimización bayesiana. 
@@ -141,8 +141,8 @@ Haber realizado todas estas pruebas con muchos conjuntos de valores y con los 3 
 A continuación, se muestra el diagrama de flujo que sigue STARS_class.py y que cumple las siguientes funciones:
 1. Encuentra estructuras con HDBSCAN
 2. Valida el clustering con un modelo supervisado de clasificación Random Forest
-3. Itera haciendo una optimización bayesiana (centrada en la métrica silhouette_score) de HDBSCAN
-4. Se detiene cuando la coherencia entre los resultados de ambos modelos es mayor o igual a 95% o en 10 iteraciones.
+3. Itera haciendo una optimización bayesiana de HDBSCAN
+4. Se detiene cuando el score calculado mediante una ponderación de silhouette_score de HDBSCAN y la coherencia entre modelos sea mayor o igual a 95% o en 100 iteraciones.
 5. Exporta los resultados, gráficas, datasets y README con información.
 
 ![Figura 4: Diagrama de flujo.](./images/flow.png)
