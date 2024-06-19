@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun 19 07:32:02 2024
-
-@author: Tatiana2
-"""
-
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
@@ -24,7 +17,7 @@ class STARS:
     def __init__(self, data_file_path,db_id,email) -> None:
         print("init")
         # Init variables, counter and space of hyperparameters
-        self.path_files : str = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/results/"
+        self.path_files : str = "C:/Users/Silvia/vs_projects/STARS_FinalProject/data/Streamlit_data/results/"
         self.path_files += str(db_id)+'/'
         self.db_id :str = str(db_id)
         if not os.path.exists(self.path_files):
