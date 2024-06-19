@@ -1,9 +1,9 @@
 # Proyecto Final: Stellar Association Recognition System (STARS)
-![Figura 1: Estructuras.](./images/structures.png)
+![Figura 1: Estructuras.](./structures.png)
 
-Dentro de las galaxias las estrellas no están distribuidas de manera uniforme, sino que se agrupan en estructuras de mayor o menor escala. Estudiar estas estructuras nos ayuda a comprender cómo evolucionan las galaxias y esto nos aporta datos cruciales para comprender la materia oscura, la formación estelar, la expansión del universo, su forma, origen y evolución futura. Sin embargo, encontrar estas estructuras, no es nada sencillo. Las estrellas se forman a partir de inmensas nubes de gas y, normalmente, se forman muchas estrellas hermanas a la vez que forman una estructura llamada cúmulo. Con el paso del tiempo y las interacciones entre las estrellas, los cúmulos se disgregan y deforman, haciendo que sea muy difícil reconocer las estrellas que formaban parte de la estructura inicialmente.
+Dentro de las galaxias las estrellas no están distribuidas de manera uniforme, sino que se agrupan en estructuras de mayor o menor escala. Estudiar estas estructuras nos ayuda a comprender cómo evolucionan las galaxias y esto nos aporta datos cruciales para comprender la materia oscura, la formación estelar, la expansión del universo, su forma, origen y evolución futura. Sin embargo, encontrar estas estructuras, no es nada sencillo. Las estrellas se forman a partir de inmensas nubes de gas y, normalmente, se forman muchas estrellas hermanas a la vez que forman una estructura llamada cúmulo. Con el paso del tiempo y las interacciones entre las estrellas, los cúmulos se disgregan y deforman, haciendo que sea muy difícil reconocer las estrellas que formaban parte de la estructura inicialmente. 
 
-Aun estando el cúmulo bien agrupado, la identificación de las estrellas que pertenecen o no a la estructura en estudio es muy compleja, necesitándose un estudio en profundidad del área del cielo en cuestión mediante diversas técnicas que, al final, son tan subjetivas que raramente producen una buena clasificación de los datos.
+Aun estando el cúmulo bien agrupado, la identificación de las estrellas que pertenecen o no a la estructura en estudio es muy compleja, necesitándose un estudio en profundidad del área del cielo en cuestión mediante diversas técnicas que, al final, son tan subjetivas que raramente producen una buena clasificación de los datos. 
 
 Los efectos de perspectiva, la gran dificultad para medir distancias, el polvo y gas interestelar o no poder medir velocidades son sólo algunos de los problemas. Una mala identificación de las estructuras resulta en conclusiones erróneas de las investigaciones.
 
@@ -82,9 +82,9 @@ Los cúmulos son grupos de estrellas que se formaron más o menos a la vez a par
 
 Es posible que en nuestra selección de estrellas tengamos estrellas que aparentemente pertenecen el grupo del cúmulo, pero que en realidad no son hermanas del resto. Estas estrellas infiltradas aparecerán como outliers en las variables antes descritas y el tratamiento correcto es su eliminación del dataset.
 
-Para este trabajo (repetitivo con cada grupo), se contruye la herramienta 'tool.pm_analysis' que nos permite, de forma rápida y gráfica, identificar outliers. Usaremos los movimientos propios, que se espera que tengan una distribución gausiana, por lo que se calcula la media y la desviación estándar y se escoge un parámetro k para conseguir un intervalo cuyos límites se calculan como l = mean +- k*std. Dividimos este trabajo y guardamos en el valor de la k escogido para cada cúmulo. Posteriormente se ejecuta esta función en bucle y así limpiamos el dataset de outliers.
+Para este trabajo (repetitivo con cada grupo), se contruye la herramienta 'tool.pm_analysis' que nos permite, de forma rápida y gráfica, identificar outliers. Usaremos los movimientos propios, que se espera que tengan una distribución gaussiana, por lo que se calcula la media y la desviación estándar y se escoge un parámetro k para conseguir un intervalo cuyos límites se calculan como l = mean +- k*std. Dividimos este trabajo y guardamos en el valor de la k escogido para cada cúmulo. Posteriormente se ejecuta esta función en bucle y así limpiamos el dataset de outliers.
 
-![Figura 2: Tratamiento de outliers](./images/outliers.png)
+![Figura 2: Tratamiento de outliers](./outliers.png)
 
 > Este trabajo está hecho en tools.py,  OutTreatment_Nombre.csv, BuildData.ipynb
 
@@ -123,14 +123,14 @@ Para alcanzar esta coherencia usaremos nos decantamos por una optimización baye
 2. Es más eficiente que grid_search o random_search porque requiere menos evaluaciones
 3. Se enfoca hacia las regiones de hiperparámetros más prometedoras gracias a una evaluación estadística que le permite tener en cuenta más información
 
-La función objetivo de la optimización bayesiana se centra en una ponderación del valor de la métrica silhouette_score (que evalúa la calidad y separación de los clusteres) y la coherencia, dando más importancia a ésta última.
+La función objetivo de la optimización bayesiana se centra en el valor de la métrica silhouette_score que evalúa la calidad y separación de los clusteres.
 
 ### 5.1 Selección del espacio de hiperparámetros
 Dado los altos tiempos de ejecución es vital seleccionar un buen espacio de hiperparámetros para la optimización bayesiana. 
 
 HDBSCAN es no supervisado, por lo que no podemos hacer uso de métricas para evaluar su rendimiento. Pero aprovechando que hemos construido nuestro dataset conociendo por adelantado los clústeres que tenemos, hemos ideado una forma de, gráficamente, poder evaluar cómo afectan los hiperparámetros al correcto desempeño del modelo. Esto se hace con la herramienta 'tools.graphic_tester'.
 
-![Figura 3: Evaluación gráfica de la influencia de los hiperparámetros](./images/grapheval_hdbscan.png)
+![Figura 3: Evaluación gráfica de la influencia de los hiperparámetros](./grapheval_hdbscan.png)
 
 En estas gráficas se muestran en azul los cúmulos que sabemos que tenemos, usando coordenadas la media de las coordenadas galácticas de las estrellas del cúmulo y, como radio de la burbuja, una ponderación del número de estrellas del cluster. En naranja hacemos los mismo, pero con la distribución de las estrellas en diferentes clusters que hace HDBSCAN.
 
@@ -141,25 +141,25 @@ Haber realizado todas estas pruebas con muchos conjuntos de valores y con los 3 
 A continuación, se muestra el diagrama de flujo que sigue STARS_class.py y que cumple las siguientes funciones:
 1. Encuentra estructuras con HDBSCAN
 2. Valida el clustering con un modelo supervisado de clasificación Random Forest
-3. Itera haciendo una optimización bayesiana de HDBSCAN
-4. Se detiene cuando el score calculado mediante una ponderación de silhouette_score de HDBSCAN y la coherencia entre modelos sea mayor o igual a 95% o en 100 iteraciones.
+3. Itera haciendo una optimización bayesiana (centrada en la métrica silhouette_score) de HDBSCAN
+4. Se detiene cuando la coherencia entre los resultados de ambos modelos es mayor o igual a 95% o en 10 iteraciones.
 5. Exporta los resultados, gráficas, datasets y README con información.
 
-![Figura 4: Diagrama de flujo.](./images/flow.png)
+![Figura 4: Diagrama de flujo.](./flow.png)
 
 ## 7. Despliegue
 El despliegue del modelo no es posible de la forma habitual debido a su tamaño y los tiempos de ejecución, por lo que se ejecutará en batch. Sin embargo, se usará Streamlit para que los usuarios puedan hacer una solicitud:
 El usuario 
-1. Introducirá su nombre y el dataset con las estrellas entre las que quiere encontrar estructuras.
+1. Introducirá su email y el dataset con las estrellas entre las que quiere encontrar estructuras.
 2. Encontrará una serie de requisitos y recomendaciones que deberá cumplir su dataset para el correcto desempeño del modelo.
 3. Recibirá un identificador que deberá guardar para obtener sus datos procesados.
 
-Una vez el modelo se haya ejecutado, el usuario podrá descargar sus resultados usando el identificador y el nombre.
+Una vez el modelo se haya ejecutado, el usuario podrá descargar sus resultados usando el identificador y el email.
 
 ## Datasets
 
 1. Clusters: contiene una lista de estrellas con sus coordenadas y el cúmulo al que pertenecen. Se ha construido en el paso 1, puntos 1 y 2.
-2. NamesCatalogEquivalence: tabla con el nombre de cada cumulo en diferentes catálogos. Se ha construido en el paso 1, punto 3. Se usa para renombrar los clusters y tenerlos todos siempre nombrados igual.
+2. NamesCatalogEquivalence: tabla con el nombre de cda cumulo en diferentes catálogos. Se ha construido en el paso 1, punto 3. Se usa para renombrar los clusters y tenerlos todos siempre nombrados igual.
 3. RenamedClusters: es el dataset Clusters habiendo cambiado los nombres de los clusters mediante la tabla NamesCatalogEquivalence. Se ha construido en el paso 1, punto 3.
 4. STARTSSample: es nuestro dataset inicial. Es el resultado de añadir todas las características de las estrellas a RenamedClusters mediante la herramienta TopCat. Se ha construido en el paso 1, punto 4.
 5. ClustersInfo: es una tabla de características generales de cada cúmulo. Es como tener 'la media' de las características de todas las estrellas que componen cada cumulo. Se construye fuera del repo.
