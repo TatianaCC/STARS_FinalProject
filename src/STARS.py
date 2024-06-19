@@ -5,7 +5,7 @@ import os
 
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 import sql_table
-from STARS_Class import STARS
+from STARS_class_p1 import STARS
 
 # Set the page configuration
 st.set_page_config(
@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="auto"  # Optional: can be "auto", "expanded", "collapsed"
 )
 
-path_CSV = "C:/Users/milser/Documents/Trasteo_4geeks/STARS_FinalProject/data/Streamlit_data/CSV/"
+path_CSV = "C:/Users/Silvia/vs_projects/STARS_FinalProject/data/Streamlit_data/CSV/"
 
 def insert_model(correo, url_modelo, estado=0) -> int | None:
     conn = sqlite3.connect('stars.db')
