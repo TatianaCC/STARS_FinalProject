@@ -2,15 +2,6 @@
 Samples/ZT-GDR3_Astro_example
 Samples/STARSSample.csv
 Samples/Decompress
-Samples/Clean/STARSSample_EDA1.csv
-Samples/Clean/STARSSample_EDA1_fz.csv
-Samples/Clean/Subsets
-Samples/Clean/NamesCatalogEquivalence.csv
-Samples/Clean/STARTSSample_EDA1_fz.csv
-Samples/Clean/STARTSSample_EDA1.csv
-Samples/Clean/STARSSample_EDA2.csv
-Samples/Clean/Feature_Selection
-Samples/Clean/Testing
 Models/HDBSCAN.pkl
 Models/HDBSCAN2.pkl
 Models/HDBSCAN-human.pkl
