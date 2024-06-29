@@ -3,6 +3,12 @@ Samples/Clean
 Samples/ZT-GDR3_Astro_example
 Samples/STARSSample.csv
 Samples/Decompress
+Samples/RenamedClusters.csv
+Samples/ClustersInfo.csv
+Samples/Clusters.csv
+Models/Clustering
+Models/Random_Forest
+Models/Selectors
 data
 #CUSTOM IGNORES
 
