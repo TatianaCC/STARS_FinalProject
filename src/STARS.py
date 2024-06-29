@@ -5,7 +5,7 @@ import os
 
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 import sql_table
-from STARS_class_p1 import STARS
+from STARS_class import STARS
 
 # Set the page configuration
 st.set_page_config(
