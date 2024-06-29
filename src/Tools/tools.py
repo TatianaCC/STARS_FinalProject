@@ -106,7 +106,7 @@ def pm_analysis(k, cluster):
     bin_widthDE = (data_maxDE-data_minDE)/bins
 
     sns.set(style="white")
-    background_image = plt.imread('../images/fondo.jpg')
+    background_image = plt.imread('../../images/fondo.jpg')
     fig, axs = plt.subplots(1, 5, figsize=(15, 6), 
                             gridspec_kw={"width_ratios": [1, 9, 1, 1, 9]})
     # pmRA boxplot

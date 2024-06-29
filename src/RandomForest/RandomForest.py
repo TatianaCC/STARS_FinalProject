@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report, accuracy_score
 from pickle import dump, load
 
 # Load data
-df = pd.read_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_predict_A.csv')
+df = pd.read_csv('../../Samples/Clean/Testing/HDBSCAN/X_data_with_y_predict_Q.csv')
 y_hdbscan = df['cluster_hdbscan']
 x_full = df.drop(columns=['cluster_hdbscan']).copy(deep=True)
 
@@ -35,4 +35,4 @@ print(f"Coherencia: {coherencia * 100:.2f}%")
 df_final = df.copy(deep = True)
 df_final['cluster_RF'] = y_pred_full
 df_final.to_csv('../../Samples/Clean/Final/STARTSOutput.csv', index=False)
-dump(rf, open("../../Models/RF_A.pkl", "wb"))
+dump(rf, open("../../Models/Random_Forest/RF_Q.pkl", "wb"))
