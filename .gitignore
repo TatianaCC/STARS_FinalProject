@@ -135,7 +135,7 @@ dmypy.json
 # Streamlit static files
 .streamlit/
 
-Samples/Clean/
+/Samples/Clean
 
 ensamble
 
