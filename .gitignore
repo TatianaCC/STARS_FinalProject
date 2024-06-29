@@ -5,7 +5,6 @@ Samples/Decompress
 Samples/Clean/STARSSample_EDA1.csv
 Samples/Clean/STARSSample_EDA1_fz.csv
 Samples/Clean/Subsets
-data/processed/factorized_mapping/Cluster_mappings.csv
 Samples/Clean/NamesCatalogEquivalence.csv
 Samples/Clean/STARTSSample_EDA1_fz.csv
 Samples/Clean/STARTSSample_EDA1.csv
@@ -25,7 +24,7 @@ Models/HDBSCAN-human_I_minsamp-0_minclusize-5_epsilon-1_metric-eu_coredist-1_gen
 Models/HDBSCAN-human_F_minsamp-5_minclusize-10_epsilon-00_metric-eu_coredist-1_genminspantree-true.pkl
 Models/HDBSCAN-human_D_minsamp-5_minclusize-10_epsilon-05_metric-man_coredist-1_genminspantree-true.pkl
 Models/HDBSCAN2_J_minsamp-0_minclusize-5_epsilon-05_metric-eu_coredist-1_genminspantree-true.pkl
-data/Streamlit_data
+data
 #CUSTOM IGNORES
 
 # Python
@@ -136,37 +135,11 @@ dmypy.json
 # Streamlit static files
 .streamlit/
 
-Samples/Clean/STARSSample_norm.csv
-Samples/Clean/Feature_Selection/X_test.csv
-Samples/Clean/Feature_Selection/X_train.csv
-Samples/Clean/Feature_Selection/Y_test.csv
-Samples/Clean/Feature_Selection/Y_train.csv
-images/output.png
-images/Kmean_3d.png
+Samples/Clean/
 
-Models/HDBSCAN_C_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN_E_minsamp-5_minclusize-10_epsilon-1_metric-man_coredist-6_genminspantree-false.pkl
-Models/HDBSCAN-human_A_minsamp-0_minclusize-5_epsilon-05_metric-eu_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN2_E_minsamp-5_minclusize-10_epsilon-1_metric-man_coredist-6_genminspantree-false.pkl
-Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN_A.pkl
-Models/HDBSCAN_B.pkl
-Models/HDBSCAN_C.pkl
-Models/HDBSCAN_D.pkl
 ensamble
-Models/HDBSCAN_E.pkl
-Models/HDBSCAN_F.pkl
-Models/HDBSCAN_G.pkl
-Models/HDBSCAN_H.pkl
-Models/HDBSCAN_I.pkl
+
 Models/selector2.pkl
-Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true2.pkl
-Models/HDBSCAN_A_minsamp-0_minclusize-20_epsilon-5_metric-euc_coredist-1_genminspantree-true_L.pkl
-Models/HDBSCAN_A_minsamp-20_minclusize-10_epsilon-05_metric-euc_coredist-1_genminspantree-true_K.pkl
-Models/HDBSCAN_A_minsamp-20_minclusize-20_epsilon-00_metric-euc_coredist-1_genminspantree-true_J.pkl
-Models/HDBSCAN_A_minsamp-0_minclusize-5_epsilon-2_metric-euc_coredist-1_genminspantree-true_M.pkl
-Models/HDBSCAN_N.pkl
-Models/HDBSCAN_O.pkl
 src/hdbscan-min_cluster_size_19-min_samples_4-cluster_selection_epsilon_0.39.pkl
 src/rf-num_clusters_1-min_cluster_size_9.pkl
 src/hdbscan-min_cluster_size_19-min_samples_4-cluster_selection_epsilon_0.39.pkl
