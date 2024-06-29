@@ -1,22 +1,9 @@
 #CUSTOM IGNORES
+Samples/Clean
 Samples/ZT-GDR3_Astro_example
 Samples/STARSSample.csv
 Samples/Decompress
-Models/HDBSCAN.pkl
-Models/HDBSCAN2.pkl
-Models/HDBSCAN-human.pkl
-Models/HDBSCAN-human_A_minsamp-0_minclusize-5_epsilon-00_metric-eu_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_B_minsamp-5_minclusize-5_epsilon-10_metric-eu_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_C_minsamp-0_minclusize-5_epsilon-00_metric-man_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_E_minsamp-5_minclusize-10_epsilon-1_metric-eu_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_G_minsamp-5_minclusize-10_epsilon-5_metric-man_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_H_minsamp-10_minclusize-10_epsilon-50_metric-eu_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_I_minsamp-0_minclusize-5_epsilon-1_metric-eu_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_F_minsamp-5_minclusize-10_epsilon-00_metric-eu_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN-human_D_minsamp-5_minclusize-10_epsilon-05_metric-man_coredist-1_genminspantree-true.pkl
-Models/HDBSCAN2_J_minsamp-0_minclusize-5_epsilon-05_metric-eu_coredist-1_genminspantree-true.pkl
 data
-/Samples/Clean
 #CUSTOM IGNORES
 
 # Python
